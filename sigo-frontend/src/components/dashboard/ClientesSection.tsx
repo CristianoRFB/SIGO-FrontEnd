@@ -47,9 +47,11 @@ export function ClientesSection() {
     try {
       setLoading(true);
       const data = await listClientes();
+      console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+      console.log(data);
       setClientes(data);
     } catch (error) {
-      console.error(error);
+      //console.error(error);
       setFeedback("Não foi possível carregar os clientes.");
     } finally {
       setLoading(false);
@@ -68,7 +70,7 @@ export function ClientesSection() {
       setFeedback("Cliente removido com sucesso.");
       await refresh();
     } catch (error) {
-      console.error(error);
+      //console.error(error);
       setFeedback("Não foi possível remover o cliente.");
     }
   }
@@ -108,7 +110,7 @@ export function ClientesSection() {
       await refresh();
       setShowModal(false);
     } catch (err) {
-      console.error(err);
+      //console.error(err);
       setFeedback("Erro ao salvar o cliente.");
     } finally {
       setModalSubmitting(false);
@@ -225,7 +227,7 @@ export function ClientesSection() {
                             setShowModal(true);
                           }
                         } catch (err) {
-                          console.error(err);
+                          //console.error(err);
                           setFeedback("Não foi possível carregar os dados do cliente.");
                         }
                       }}

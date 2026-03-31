@@ -67,7 +67,7 @@ export function OverviewSection() {
           veiculos: veiculosList,
         });
       } catch (err) {
-        console.error(err);
+        //console.error(err);
         setError(
           err instanceof Error
             ? err.message

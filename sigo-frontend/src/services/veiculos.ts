@@ -1,52 +1,52 @@
 import { ApiResponse, Veiculo } from "@/types/entities";
 import { apiFetch } from "./api-client";
+import { BACKEND_API_BASE_URL } from "@/lib/config";
 
-const BASE_URL = "/api/veiculos";
+const BASE_URL = `${BACKEND_API_BASE_URL}/Veiculo`;
 
-type VeiculoResponse = ApiResponse<Veiculo[] | Veiculo | null>;
-
-export async function listVeiculos() {
-  const payload = await apiFetch<VeiculoResponse>(BASE_URL);
-  return normalize(payload.Data);
+// Lista todos os veículos
+export async function listVeiculos(): Promise<Veiculo[]> {
+  const payload = await apiFetch(BASE_URL);
+  return normalize(payload?.data);
 }
 
-export async function createVeiculo(veiculo: Partial<Veiculo>) {
-  return apiFetch<VeiculoResponse>(BASE_URL, {
+// Cria um novo veículo
+export async function createVeiculo(veiculo: Partial<Veiculo>): Promise<ApiResponse<Veiculo>> {
+  return apiFetch(BASE_URL, {
     method: "POST",
     body: JSON.stringify(veiculo),
   });
 }
 
-export async function updateVeiculo(id: number, veiculo: Partial<Veiculo>) {
-  return apiFetch<VeiculoResponse>(`${BASE_URL}/${id}`, {
+// Atualiza um veículo existente
+export async function updateVeiculo(id: number, veiculo: Partial<Veiculo>): Promise<ApiResponse<Veiculo>> {
+  return apiFetch(`${BASE_URL}/${id}`, {
     method: "PUT",
     body: JSON.stringify(veiculo),
   });
 }
 
-export async function deleteVeiculo(id: number) {
-  return apiFetch<VeiculoResponse>(`${BASE_URL}/${id}`, {
+// Deleta um veículo pelo ID
+export async function deleteVeiculo(id: number): Promise<ApiResponse<null>> {
+  return apiFetch(`${BASE_URL}/${id}`, {
     method: "DELETE",
   });
 }
 
-export async function searchVeiculoByPlaca(placa: string) {
-  const payload = await apiFetch<VeiculoResponse>(
-    `${BASE_URL}/placa/${encodeURIComponent(placa)}`
-  );
-  return normalize(payload.Data);
+// Busca veículos pela placa
+export async function searchVeiculoByPlaca(placa: string): Promise<Veiculo[]> {
+  const payload = await apiFetch(`${BASE_URL}/placa/${encodeURIComponent(placa)}`);
+  return normalize(payload?.data);
 }
 
-export async function searchVeiculoByTipo(tipo: string) {
-  const payload = await apiFetch<VeiculoResponse>(
-    `${BASE_URL}/tipo/${encodeURIComponent(tipo)}`
-  );
-  return normalize(payload.Data);
+// Busca veículos pelo tipo
+export async function searchVeiculoByTipo(tipo: string): Promise<Veiculo[]> {
+  const payload = await apiFetch(`${BASE_URL}/tipo/${encodeURIComponent(tipo)}`);
+  return normalize(payload?.data);
 }
 
-function normalize(data: Veiculo[] | Veiculo | null | undefined) {
-  if (!data) {
-    return [];
-  }
+// Normaliza data para sempre retornar array
+function normalize(data: Veiculo[] | Veiculo | null | undefined): Veiculo[] {
+  if (!data) return [];
   return Array.isArray(data) ? data : [data];
 }

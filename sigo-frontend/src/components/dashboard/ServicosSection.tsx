@@ -53,7 +53,7 @@ export function ServicosSection() {
       const data = await listServicos();
       setServicos(data);
     } catch (error) {
-      console.error(error);
+      //console.error(error);
       setFeedback("Não foi possível carregar os serviços.");
     } finally {
       setLoading(false);
@@ -106,7 +106,7 @@ export function ServicosSection() {
       await refresh();
       resetForm();
     } catch (error) {
-      console.error(error);
+      //console.error(error);
       setFeedback("Não foi possível salvar o serviço.");
     } finally {
       setSubmitting(false);
@@ -122,7 +122,7 @@ export function ServicosSection() {
       setFeedback("Serviço removido com sucesso.");
       await refresh();
     } catch (error) {
-      console.error(error);
+      //console.error(error);
       setFeedback("Não foi possível remover o serviço.");
     }
   }

@@ -1,7 +1,7 @@
 export interface ApiResponse<T> {
-  Code: number;
-  Message?: string | null;
-  Data: T;
+  code: number;
+  message?: string | null;
+  data: T;
 }
 
 export interface Cliente {

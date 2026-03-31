@@ -68,7 +68,7 @@ export function VeiculosSection() {
       setVeiculos(veiculosList);
       setCores(coresList);
     } catch (error) {
-      console.error(error);
+      //console.error(error);
       setFeedback("Não foi possível carregar os veículos.");
     } finally {
       setLoading(false);
@@ -132,7 +132,7 @@ export function VeiculosSection() {
       await refresh();
       resetForm();
     } catch (error) {
-      console.error(error);
+      //console.error(error);
       setFeedback("Não foi possível salvar o veículo.");
     } finally {
       setSubmitting(false);
@@ -148,7 +148,7 @@ export function VeiculosSection() {
       setFeedback("Veículo removido com sucesso.");
       await refresh();
     } catch (error) {
-      console.error(error);
+      //console.error(error);
       setFeedback("Não foi possível remover o veículo.");
     }
   }

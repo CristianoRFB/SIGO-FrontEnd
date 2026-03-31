@@ -32,7 +32,7 @@ export default function NovoClientePage() {
       setFeedback("Aluno cadastrado com sucesso.");
       setTimeout(() => router.push("/dashboard"), 800);
     } catch (error) {
-      console.error(error);
+      //console.error(error);
       setFeedback("Erro ao cadastrar o aluno.");
     } finally {
       setLoading(false);

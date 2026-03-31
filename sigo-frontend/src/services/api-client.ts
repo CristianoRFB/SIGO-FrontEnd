@@ -1,53 +1,56 @@
 export class ApiError extends Error {
   status: number;
-  payload: unknown;
+  response: any;
 
-  constructor(message: string, status: number, payload: unknown) {
+  constructor(message: string, status: number, response: any) {
     super(message);
     this.name = "ApiError";
     this.status = status;
-    this.payload = payload;
+    this.response = response;
   }
 }
 
-interface ApiFetchOptions extends RequestInit {
+interface SimpleFetchOptions extends RequestInit {
   parseJson?: boolean;
 }
 
-export async function apiFetch<T = unknown>(
+export async function apiFetch(
   url: string,
-  options: ApiFetchOptions = {}
-): Promise<T> {
+  options: SimpleFetchOptions = {}
+): Promise<any> {
   const { headers, parseJson = true, ...rest } = options;
 
-  const response = await fetch(url, {
-    ...rest,
-    headers: {
-      "Content-Type": "application/json",
-      ...(headers ?? {}),
-    },
-    cache: "no-store",
-  });
 
-  if (!parseJson) {
-    return undefined as unknown as T;
+  let response: Response;
+
+  try {
+    response = await fetch(url, {
+      ...rest,
+      headers: {
+        "Content-Type": "application/json",
+        ...headers,
+      },
+      cache: "no-store",
+    });
+    console.log(response);
+
+  } catch (err) {
+    console.error("💥 ERRO DE REDE:", err);
+    throw new ApiError("Erro de rede", 0, err);
   }
 
-  const contentType = response.headers.get("content-type") ?? "";
-
-  const payload = contentType.includes("application/json")
-    ? await response.json()
-    : await response.text();
+  let data: any = null;
+  try {
+    const text = await response.text();
+    data = text ? JSON.parse(text) : null;
+  } catch (err) {
+    console.warn("⚠️ Não foi possível parsear JSON, retornando texto cru.");
+    data = null;
+  }
 
   if (!response.ok) {
-    throw new ApiError(
-      payload && typeof payload === "object" && "message" in (payload as Record<string, unknown>)
-        ? String((payload as Record<string, unknown>).message)
-        : "Falha ao comunicar com a API",
-      response.status,
-      payload
-    );
+    throw new ApiError(`Erro HTTP ${response.status}`, response.status, data);
   }
 
-  return payload as T;
+  return parseJson ? data : undefined;
 }

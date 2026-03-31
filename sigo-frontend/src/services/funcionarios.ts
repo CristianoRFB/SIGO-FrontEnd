@@ -1,59 +1,52 @@
 import { ApiResponse, Funcionario } from "@/types/entities";
 import { apiFetch } from "./api-client";
+import { BACKEND_API_BASE_URL } from "@/lib/config";
 
-const BASE_URL = "/api/funcionarios";
+const BASE_URL = `${BACKEND_API_BASE_URL}/Funcionario`;
 
-type FuncionarioResponse = ApiResponse<Funcionario[] | Funcionario | null>;
-
-export async function listFuncionarios() {
-  const payload = await apiFetch<FuncionarioResponse>(BASE_URL);
-  return normalize(payload.Data);
+// Lista todos os funcionários
+export async function listFuncionarios(): Promise<Funcionario[]> {
+  const payload = await apiFetch(BASE_URL);
+  return normalize(payload?.data);
 }
 
-export async function getFuncionario(id: number) {
-  const result = await apiFetch<Funcionario | FuncionarioResponse>(`${BASE_URL}/${id}`);
-  return isApiResponse(result) ? (result.Data as Funcionario | null) : (result as Funcionario);
+// Busca funcionário por ID
+export async function getFuncionario(id: number): Promise<Funcionario | null> {
+  const payload = await apiFetch(`${BASE_URL}/${id}`);
+  return payload?.data ?? payload ?? null;
 }
 
-export async function createFuncionario(funcionario: Partial<Funcionario>) {
-  return apiFetch<FuncionarioResponse>(BASE_URL, {
+// Cria um novo funcionário
+export async function createFuncionario(funcionario: Partial<Funcionario>): Promise<ApiResponse<Funcionario>> {
+  return apiFetch(BASE_URL, {
     method: "POST",
     body: JSON.stringify(funcionario),
   });
 }
 
-export async function updateFuncionario(id: number, funcionario: Partial<Funcionario>) {
-  return apiFetch<FuncionarioResponse>(`${BASE_URL}/${id}`, {
+// Atualiza um funcionário existente
+export async function updateFuncionario(id: number, funcionario: Partial<Funcionario>): Promise<ApiResponse<Funcionario>> {
+  return apiFetch(`${BASE_URL}/${id}`, {
     method: "PUT",
     body: JSON.stringify(funcionario),
   });
 }
 
-export async function deleteFuncionario(id: number) {
-  return apiFetch<FuncionarioResponse>(`${BASE_URL}/${id}`, {
+// Deleta um funcionário pelo ID
+export async function deleteFuncionario(id: number): Promise<ApiResponse<null>> {
+  return apiFetch(`${BASE_URL}/${id}`, {
     method: "DELETE",
   });
 }
 
-export async function searchFuncionarioByNome(nome: string) {
-  const payload = await apiFetch<FuncionarioResponse>(
-    `${BASE_URL}/nome/${encodeURIComponent(nome)}`
-  );
-  return normalize(payload.Data);
+// Busca funcionário pelo nome
+export async function searchFuncionarioByNome(nome: string): Promise<Funcionario[]> {
+  const payload = await apiFetch(`${BASE_URL}/nome/${encodeURIComponent(nome)}`);
+  return normalize(payload?.data);
 }
 
-function normalize(data: Funcionario[] | Funcionario | null | undefined) {
-  if (!data) {
-    return [];
-  }
+// Normaliza data para sempre retornar um array
+function normalize(data: Funcionario[] | Funcionario | null | undefined): Funcionario[] {
+  if (!data) return [];
   return Array.isArray(data) ? data : [data];
-}
-
-function isApiResponse(value: unknown): value is FuncionarioResponse {
-  return Boolean(
-    value &&
-      typeof value === "object" &&
-      "Code" in value &&
-      "Data" in value
-  );
 }

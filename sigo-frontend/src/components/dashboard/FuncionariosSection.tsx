@@ -48,7 +48,7 @@ export function FuncionariosSection() {
       const data = await listFuncionarios();
       setFuncionarios(data);
     } catch (error) {
-      console.error(error);
+      //console.error(error);
       setFeedback("Não foi possível carregar os colaboradores.");
     } finally {
       setLoading(false);
@@ -103,7 +103,7 @@ export function FuncionariosSection() {
       await refresh();
       resetForm();
     } catch (error) {
-      console.error(error);
+      //console.error(error);
       setFeedback("Não foi possível salvar o colaborador.");
     } finally {
       setSubmitting(false);
@@ -119,7 +119,7 @@ export function FuncionariosSection() {
       setFeedback("Colaborador removido.");
       await refresh();
     } catch (error) {
-      console.error(error);
+      //console.error(error);
       setFeedback("Não foi possível remover o colaborador.");
     }
   }

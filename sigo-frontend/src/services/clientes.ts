@@ -1,65 +1,60 @@
 import { ApiResponse, Cliente } from "@/types/entities";
 import { apiFetch } from "./api-client";
+import { BACKEND_API_BASE_URL } from "@/lib/config";
 
-const BASE_URL = "/api/clientes";
+const BASE_URL = `${BACKEND_API_BASE_URL}/Cliente`;
 
-type ClienteResponse = ApiResponse<Cliente[] | Cliente | null>;
+export async function listClientes(): Promise<Cliente[]> {
+  const payload = await apiFetch(`${BASE_URL}`);
 
-export async function listClientes() {
-  const payload = await apiFetch<ClienteResponse>(BASE_URL);
-  if (Array.isArray(payload.Data)) {
-    return payload.Data;
+  if (payload?.data) {
+    return Array.isArray(payload.data) ? payload.data : [payload.data];
   }
-  if (payload.Data && !Array.isArray(payload.Data)) {
-    return [payload.Data];
-  }
+
   return [];
 }
 
-export async function getCliente(id: number) {
-  const payload = await apiFetch<Cliente | ClienteResponse>(`${BASE_URL}/${id}`);
+export async function getCliente(id: number): Promise<Cliente | null> {
+  const payload = await apiFetch(`${BASE_URL}/${id}`);
+
   if (isApiResponse(payload)) {
-    return payload.Data as Cliente | null;
+    return payload.data ?? null;
   }
-  return payload as Cliente;
+
+  return payload ?? null;
 }
 
-export async function createCliente(cliente: Partial<Cliente>) {
-  return apiFetch<ClienteResponse>(BASE_URL, {
+export async function createCliente(cliente: Partial<Cliente>): Promise<ApiResponse<Cliente>> {
+  return apiFetch(BASE_URL, {
     method: "POST",
     body: JSON.stringify(cliente),
   });
 }
 
-export async function updateCliente(id: number, cliente: Partial<Cliente>) {
-  return apiFetch<ClienteResponse>(`${BASE_URL}/${id}`, {
+export async function updateCliente(id: number, cliente: Partial<Cliente>): Promise<ApiResponse<Cliente>> {
+  return apiFetch(`${BASE_URL}/${id}`, {
     method: "PUT",
     body: JSON.stringify(cliente),
   });
 }
 
-export async function deleteCliente(id: number) {
-  return apiFetch<ClienteResponse>(`${BASE_URL}/${id}`, {
+export async function deleteCliente(id: number): Promise<ApiResponse<null>> {
+  return apiFetch(`${BASE_URL}/${id}`, {
     method: "DELETE",
   });
 }
 
-export async function searchClienteByNome(nome: string) {
-  const payload = await apiFetch<ClienteResponse>(`${BASE_URL}/nome/${encodeURIComponent(nome)}`);
-  if (Array.isArray(payload.Data)) {
-    return payload.Data;
+export async function searchClienteByNome(nome: string): Promise<Cliente[]> {
+  const payload = await apiFetch(`${BASE_URL}/nome/${encodeURIComponent(nome)}`);
+
+  if (payload?.data) {
+    return Array.isArray(payload.data) ? payload.data : [payload.data];
   }
-  if (payload.Data) {
-    return [payload.Data as Cliente];
-  }
+
   return [];
 }
 
-function isApiResponse(value: unknown): value is ClienteResponse {
-  return Boolean(
-    value &&
-      typeof value === "object" &&
-      "Code" in value &&
-      "Data" in value
-  );
+// Tipo guard simples
+function isApiResponse(value: unknown): value is ApiResponse<any> {
+  return !!value && typeof value === "object" && "Code" in value && "data" in value;
 }

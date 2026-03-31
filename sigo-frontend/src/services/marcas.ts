@@ -1,68 +1,52 @@
 import { ApiResponse, Marca } from "@/types/entities";
 import { apiFetch } from "./api-client";
+import { BACKEND_API_BASE_URL } from "@/lib/config";
 
-const BASE_URL = "/api/marcas";
+const BASE_URL = `${BACKEND_API_BASE_URL}/Marca`;
 
-type MarcaResponse = ApiResponse<Marca[] | Marca | null>;
-
-export async function listMarcas() {
-  const payload = await apiFetch<MarcaResponse>(BASE_URL);
-  return normalize(payload.Data);
+// Lista todas as marcas
+export async function listMarcas(): Promise<Marca[]> {
+  const payload = await apiFetch(BASE_URL);
+  return normalize(payload?.data);
 }
 
-export async function getMarca(id: number) {
-  const result = await apiFetch<Marca | MarcaResponse>(`${BASE_URL}/${id}`);
-  return isApiResponse(result) ? (result.Data as Marca | null) : (result as Marca);
+// Busca marca por ID
+export async function getMarca(id: number): Promise<Marca | null> {
+  const payload = await apiFetch(`${BASE_URL}/${id}`);
+  return payload?.data ?? payload ?? null;
 }
 
-export async function createMarca(marca: Partial<Marca>) {
-  return apiFetch<MarcaResponse>(BASE_URL, {
+// Cria uma nova marca
+export async function createMarca(marca: Partial<Marca>): Promise<ApiResponse<Marca>> {
+  return apiFetch(BASE_URL, {
     method: "POST",
     body: JSON.stringify(marca),
   });
 }
 
-export async function updateMarca(id: number, marca: Partial<Marca>) {
-  return apiFetch<MarcaResponse>(`${BASE_URL}/${id}`, {
+// Atualiza uma marca existente
+export async function updateMarca(id: number, marca: Partial<Marca>): Promise<ApiResponse<Marca>> {
+  return apiFetch(`${BASE_URL}/${id}`, {
     method: "PUT",
     body: JSON.stringify(marca),
   });
 }
 
-export async function deleteMarca(id: number) {
-  return apiFetch<MarcaResponse>(`${BASE_URL}/${id}`, {
+// Deleta uma marca pelo ID
+export async function deleteMarca(id: number): Promise<ApiResponse<null>> {
+  return apiFetch(`${BASE_URL}/${id}`, {
     method: "DELETE",
   });
 }
 
-export async function searchMarcaByNome(nome: string) {
-  const payload = await apiFetch<Marca[] | MarcaResponse>(
-    `${BASE_URL}/nome/${encodeURIComponent(nome)}`
-  );
-
-  if (Array.isArray(payload)) {
-    return payload;
-  }
-
-  if (isApiResponse(payload)) {
-    return normalize(payload.Data);
-  }
-
-  return [];
+// Busca marcas pelo nome
+export async function searchMarcaByNome(nome: string): Promise<Marca[]> {
+  const payload = await apiFetch(`${BASE_URL}/nome/${encodeURIComponent(nome)}`);
+  return normalize(payload?.data);
 }
 
-function normalize(data: Marca[] | Marca | null | undefined) {
-  if (!data) {
-    return [];
-  }
+// Normaliza data para sempre retornar um array
+function normalize(data: Marca[] | Marca | null | undefined): Marca[] {
+  if (!data) return [];
   return Array.isArray(data) ? data : [data];
-}
-
-function isApiResponse(value: unknown): value is MarcaResponse {
-  return Boolean(
-    value &&
-      typeof value === "object" &&
-      "Code" in value &&
-      "Data" in value
-  );
 }

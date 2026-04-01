@@ -34,7 +34,7 @@ export function CoresSection() {
       setLoading(true);
       const data = await listCores();
       setCores(data);
-    } catch (error) {
+    } catch {
       //console.error(error);
       setFeedback("Não foi possível carregar as cores.");
     } finally {
@@ -75,7 +75,7 @@ export function CoresSection() {
       }
       await refresh();
       resetForm();
-    } catch (error) {
+    } catch {
       //console.error(error);
       setFeedback("Não foi possível salvar a cor.");
     } finally {
@@ -91,7 +91,7 @@ export function CoresSection() {
       await deleteCor(cor.Id);
       setFeedback("Cor removida com sucesso.");
       await refresh();
-    } catch (error) {
+    } catch {
       //console.error(error);
       setFeedback("Não foi possível remover a cor.");
     }

@@ -1,24 +1,31 @@
 export interface ApiResponse<T> {
-  code: number;
+  code?: number;
+  Code?: number;
   message?: string | null;
+  Message?: string | null;
   data: T;
+}
+
+export interface Telefone {
+  Id: number;
+  Numero: string;
+  DDD?: number;
+  ClienteId?: number;
 }
 
 export interface Cliente {
   Id: number;
   Nome: string;
   Email: string;
-  Senha?: string;
   senha?: string;
   Cpf_Cnpj: string;
   Obs?: string;
-  Razao?: string;
   razao?: string;
   DataNasc: string;
   Numero: number;
   Rua: string;
   Cidade: string;
-  Cep: number;
+  Cep: string;
   Bairro: string;
   Estado: string;
   Pais: string;
@@ -27,13 +34,7 @@ export interface Cliente {
   TipoCliente: number;
   Situacao: number;
   Telefones?: Telefone[] | null;
-}
-
-export interface Telefone {
-  Id: number;
-  Numero: string;
-  DDD: number;
-  ClienteId?: number;
+  Veiculos?: Veiculo[] | null;
 }
 
 export interface Funcionario {
@@ -41,6 +42,7 @@ export interface Funcionario {
   Nome: string;
   Cpf: string;
   Cargo: string;
+  Senha?: string;
   Email: string;
   Situacao: number;
 }
@@ -54,15 +56,10 @@ export interface Servico {
 }
 
 export interface Marca {
-  IdMarca: number;
-  NomeMarca: string;
-  DescMarca?: string;
-  TipoMarca?: string;
-}
-
-export interface Cor {
   Id: number;
-  NomeCor: string;
+  Nome: string;
+  Desc?: string;
+  TipoMarca?: string;
 }
 
 export interface Veiculo {
@@ -75,8 +72,11 @@ export interface Veiculo {
   Quilometragem: number;
   Combustivel: string;
   Seguro: string;
+  Cor?: string;
+  ClienteId: number;
+  CorId?: number;
   Status: number;
-  Cores: Cor[];
+  Situacao?: number;
 }
 
-export type SituacaoStatus = 0 | 1 | 2 | 3;
+export type SituacaoStatus = 1 | 2;

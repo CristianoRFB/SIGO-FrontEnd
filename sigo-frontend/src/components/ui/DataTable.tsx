@@ -21,6 +21,13 @@ export function DataTable<T>({
   emptyMessage = "Nenhum registro encontrado",
   getRowId,
 }: DataTableProps<T>) {
+  function resolveRowKey(item: T, index: number) {
+    const rowId = getRowId?.(item);
+    return rowId === undefined || rowId === null || rowId === ""
+      ? `row-${index}`
+      : `row-${String(rowId)}-${index}`;
+  }
+
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       <table className="data-table">
@@ -46,7 +53,7 @@ export function DataTable<T>({
             </tr>
           ) : (
             data.map((item, index) => (
-              <tr key={getRowId ? getRowId(item) : index}>
+              <tr key={resolveRowKey(item, index)}>
                 {columns.map((column) => {
                   const content = column.render ? column.render(item) : (item as Record<string, unknown>)[column.key as string];
                   return (

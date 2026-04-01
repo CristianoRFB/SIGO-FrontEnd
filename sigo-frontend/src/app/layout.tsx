@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "SIGO | Gestão de Oficina",
   description:
-    "Painel administrativo do SIGO para gestão de clientes, veículos, serviços e equipe.",
+    "Painel administrativo do SIGO para gestao de clientes, veiculos, servicos e funcionarios.",
 };
 
 export default function RootLayout({

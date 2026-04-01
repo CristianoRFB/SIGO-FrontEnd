@@ -20,7 +20,6 @@ export async function apiFetch(
 ): Promise<any> {
   const { headers, parseJson = true, ...rest } = options;
 
-
   let response: Response;
 
   try {
@@ -32,19 +31,16 @@ export async function apiFetch(
       },
       cache: "no-store",
     });
-    console.log(response);
-
   } catch (err) {
-    console.error("💥 ERRO DE REDE:", err);
     throw new ApiError("Erro de rede", 0, err);
   }
 
   let data: any = null;
+
   try {
     const text = await response.text();
     data = text ? JSON.parse(text) : null;
-  } catch (err) {
-    console.warn("⚠️ Não foi possível parsear JSON, retornando texto cru.");
+  } catch {
     data = null;
   }
 

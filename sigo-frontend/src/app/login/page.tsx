@@ -22,7 +22,7 @@ export default function LoginPage() {
     try {
       setLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 700));
-      router.push("/dashboard");
+      router.push("/visao-geral");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Falha ao autenticar");
     } finally {

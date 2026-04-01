@@ -5,8 +5,8 @@ export const sexoOptions = [
 ];
 
 export const tipoClienteOptions = [
-  { value: 1, label: "Pessoa Física" },
-  { value: 2, label: "Pessoa Jurídica" },
+  { value: 1, label: "Pessoa Fisica" },
+  { value: 2, label: "Pessoa Juridica" },
 ];
 
 export const situacaoOptions = [
@@ -16,7 +16,7 @@ export const situacaoOptions = [
 
 export const statusVeiculoOptions = [
   { value: 0, label: "Pendente" },
-  { value: 1, label: "Aguardando peças" },
+  { value: 1, label: "Aguardando pecas" },
   { value: 2, label: "Em andamento" },
-  { value: 3, label: "Concluído" },
+  { value: 3, label: "Concluido" },
 ];

@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import { DataTable } from "@/components/ui/DataTable";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Marca } from "@/types/entities";
 import {
@@ -11,14 +12,14 @@ import {
 } from "@/services/marcas";
 
 interface FormState {
-  NomeMarca: string;
-  DescMarca: string;
+  Nome: string;
+  Desc: string;
   TipoMarca: string;
 }
 
 const initialForm: FormState = {
-  NomeMarca: "",
-  DescMarca: "",
+  Nome: "",
+  Desc: "",
   TipoMarca: "",
 };
 
@@ -37,17 +38,16 @@ export function MarcasSection() {
   }, []);
 
   async function refresh() {
-  try {
-    setLoading(true);
-    const data = await listMarcas();
-    console.log("Dados recebidos:", data);
-    setMarcas(data);
-  } catch {
-    setFeedback("Não foi possível carregar as marcas.");
-  } finally {
-    setLoading(false);
+    try {
+      setLoading(true);
+      const data = await listMarcas();
+      setMarcas(data);
+    } catch {
+      setFeedback("Nao foi possivel carregar as marcas.");
+    } finally {
+      setLoading(false);
+    }
   }
-}
 
   function resetForm() {
     setForm(initialForm);
@@ -61,10 +61,10 @@ export function MarcasSection() {
   }
 
   function populateForm(marca: Marca) {
-    setEditingId(marca.IdMarca ?? null);
+    setEditingId(marca.Id);
     setForm({
-      NomeMarca: marca.NomeMarca ?? "",
-      DescMarca: marca.DescMarca ?? "",
+      Nome: marca.Nome ?? "",
+      Desc: marca.Desc ?? "",
       TipoMarca: marca.TipoMarca ?? "",
     });
     setShowModal(true);
@@ -77,7 +77,7 @@ export function MarcasSection() {
 
     try {
       if (editingId !== null) {
-        await updateMarca(editingId, form);
+        await updateMarca(editingId, { ...form, Id: editingId });
         setFeedback("Marca atualizada com sucesso.");
       } else {
         await createMarca(form);
@@ -86,32 +86,37 @@ export function MarcasSection() {
       await refresh();
       resetForm();
     } catch {
-      setFeedback("Não foi possível salvar a marca.");
+      setFeedback("Nao foi possivel salvar a marca.");
     } finally {
       setSubmitting(false);
     }
   }
 
   async function handleDelete(marca: Marca) {
-    if (!window.confirm(`Remover a marca ${marca.NomeMarca}?`)) return;
+    if (!window.confirm(`Remover a marca ${marca.Nome}?`)) {
+      return;
+    }
 
     try {
-      await deleteMarca(marca.IdMarca);
+      await deleteMarca(marca.Id);
       setFeedback("Marca removida com sucesso.");
       await refresh();
     } catch {
-      setFeedback("Não foi possível remover a marca.");
+      setFeedback("Nao foi possivel remover a marca.");
     }
   }
 
-  // Filtro simples, sem chance de remover tudo sem querer:
   const filtered = useMemo(() => {
-    if (!search.trim()) return marcas;
+    if (!search.trim()) {
+      return marcas;
+    }
+
     const term = search.toLowerCase();
-    return marcas.filter((m) =>
-      [m.NomeMarca, m.TipoMarca].some((val) =>
-        val?.toLowerCase().includes(term)
-      )
+
+    return marcas.filter((marca) =>
+      [marca.Nome, marca.TipoMarca]
+        .filter(Boolean)
+        .some((value) => value!.toLowerCase().includes(term))
     );
   }, [marcas, search]);
 
@@ -119,7 +124,7 @@ export function MarcasSection() {
     <div className="space-y-6">
       <SectionHeader
         title="Marcas"
-        description="Gerencie o catálogo de marcas relacionadas aos veículos e produtos."
+        description="Gerencie o catalogo de marcas relacionadas aos veiculos e produtos."
         actionSlot={
           <div className="flex items-center gap-3">
             <button
@@ -132,7 +137,7 @@ export function MarcasSection() {
             <input
               type="search"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(event) => setSearch(event.target.value)}
               placeholder="Buscar por nome ou tipo"
               className="w-64 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
             />
@@ -146,153 +151,90 @@ export function MarcasSection() {
         </div>
       )}
 
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse border border-slate-200">
-          <thead className="bg-slate-100 text-slate-700 text-left text-xs font-semibold uppercase tracking-wide">
-            <tr>
-              <th className="border border-slate-300 px-4 py-2">Marca</th>
-              <th className="border border-slate-300 px-4 py-2">Descrição</th>
-              <th className="border border-slate-300 px-4 py-2">Segmento</th>
-              <th className="border border-slate-300 px-4 py-2">Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan={4} className="text-center py-6 text-slate-500">
-                  Carregando marcas...
-                </td>
-              </tr>
-            ) : filtered.length === 0 ? (
-              <tr>
-                <td colSpan={4} className="text-center py-6 text-slate-500">
-                  Nenhuma marca cadastrada
-                </td>
-              </tr>
-            ) : (
-              filtered.map((marca) => (
-                <tr key={marca.IdMarca}>
-                  <td className="border border-slate-300 px-4 py-2">
-                    {marca.NomeMarca || "—"}
-                  </td>
-                  <td className="border border-slate-300 px-4 py-2">
-                    {marca.DescMarca || "—"}
-                  </td>
-                  <td className="border border-slate-300 px-4 py-2">
-                    {marca.TipoMarca || "—"}
-                  </td>
-                  <td className="border border-slate-300 px-4 py-2">
-                    <button
-                      onClick={() => populateForm(marca)}
-                      className="text-blue-600 hover:underline text-xs font-medium mr-3"
-                    >
-                      Editar
-                    </button>
-                    <button
-                      onClick={() => handleDelete(marca)}
-                      className="text-red-600 hover:underline text-xs font-medium"
-                    >
-                      Remover
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <DataTable
+        data={filtered}
+        columns={[
+          { header: "Marca", key: "Nome" },
+          { header: "Descricao", key: "Desc" },
+          { header: "Segmento", key: "TipoMarca" },
+          {
+            header: "Acoes",
+            key: "Id",
+            render: (marca: Marca) => (
+              <div className="flex gap-2 text-xs">
+                <button
+                  type="button"
+                  onClick={() => populateForm(marca)}
+                  className="rounded-lg border border-emerald-200 px-3 py-1 font-medium text-emerald-600 hover:bg-emerald-50"
+                >
+                  Editar
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(marca)}
+                  className="rounded-lg border border-rose-200 px-3 py-1 font-medium text-rose-600 hover:bg-rose-50"
+                >
+                  Remover
+                </button>
+              </div>
+            ),
+          },
+        ]}
+        emptyMessage={loading ? "Carregando marcas..." : "Nenhuma marca cadastrada"}
+        getRowId={(marca) => marca.Id}
+      />
 
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 bg-black/40"
-            onClick={() => setShowModal(false)}
-          />
-          <div className="relative z-10 w-full max-w-lg rounded-xl bg-white shadow-lg flex flex-col max-h-[90vh]">
-            <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4 flex-shrink-0">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setShowModal(false)} />
+          <div className="relative z-10 flex max-h-[90vh] w-full max-w-lg flex-col rounded-xl bg-white shadow-lg">
+            <div className="flex shrink-0 items-center justify-between border-b border-slate-200 px-6 py-4">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-600">
                   {editingId !== null ? "Editar" : "Nova"} Marca
                 </p>
                 <h3 className="mt-2 text-lg font-semibold text-slate-900">
-                  {editingId !== null
-                    ? "Atualize as informações"
-                    : "Preencha os dados"}
+                  {editingId !== null ? "Atualize as informacoes" : "Preencha os dados"}
                 </h3>
               </div>
-              <button
-                type="button"
-                onClick={() => setShowModal(false)}
-                className="text-slate-500 hover:text-slate-700"
-              >
+              <button type="button" onClick={() => setShowModal(false)} className="text-slate-500 hover:text-slate-700">
                 Fechar
               </button>
             </div>
-
-            <form
-              id="marca-form"
-              className="mt-0 space-y-4 px-6 py-4 overflow-y-auto"
-              onSubmit={handleSubmit}
-            >
+            <form id="marca-form" className="mt-0 space-y-4 overflow-y-auto px-6 py-4" onSubmit={handleSubmit}>
               <div>
-                <label className="block text-xs font-semibold text-slate-400">
-                  Nome da marca
-                </label>
+                <label className="block text-xs font-semibold text-slate-400">Nome da marca</label>
                 <input
                   required
-                  value={form.NomeMarca}
-                  onChange={(e) =>
-                    setForm((prev) => ({ ...prev, NomeMarca: e.target.value }))
-                  }
+                  value={form.Nome}
+                  onChange={(event) => setForm((prev) => ({ ...prev, Nome: event.target.value }))}
                   className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400">
-                  Segmento ou linha
-                </label>
+                <label className="block text-xs font-semibold text-slate-400">Segmento ou linha</label>
                 <input
                   value={form.TipoMarca}
-                  onChange={(e) =>
-                    setForm((prev) => ({ ...prev, TipoMarca: e.target.value }))
-                  }
+                  onChange={(event) => setForm((prev) => ({ ...prev, TipoMarca: event.target.value }))}
                   className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400">
-                  Descrição
-                </label>
+                <label className="block text-xs font-semibold text-slate-400">Descricao</label>
                 <textarea
                   rows={3}
-                  value={form.DescMarca}
-                  onChange={(e) =>
-                    setForm((prev) => ({ ...prev, DescMarca: e.target.value }))
-                  }
+                  value={form.Desc}
+                  onChange={(event) => setForm((prev) => ({ ...prev, Desc: event.target.value }))}
                   className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
                 />
               </div>
             </form>
-
-            <div className="flex items-center gap-3 justify-end border-t border-slate-200 px-6 py-4 flex-shrink-0">
-              <button
-                type="button"
-                onClick={() => setShowModal(false)}
-                className="rounded-xl border border-slate-200 px-4 py-2 text-sm"
-              >
+            <div className="flex shrink-0 items-center justify-end gap-3 border-t border-slate-200 px-6 py-4">
+              <button type="button" onClick={() => setShowModal(false)} className="rounded-xl border border-slate-200 px-4 py-2 text-sm">
                 Cancelar
               </button>
-              <button
-                type="submit"
-                form="marca-form"
-                disabled={submitting}
-                className="rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600 disabled:opacity-60"
-              >
-                {submitting
-                  ? "Salvando..."
-                  : editingId !== null
-                  ? "Atualizar"
-                  : "Cadastrar"}
+              <button type="submit" form="marca-form" disabled={submitting} className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60">
+                {submitting ? "Salvando..." : editingId !== null ? "Atualizar" : "Cadastrar"}
               </button>
             </div>
           </div>

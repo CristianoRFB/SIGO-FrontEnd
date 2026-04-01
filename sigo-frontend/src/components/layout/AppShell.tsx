@@ -1,30 +1,18 @@
 "use client";
 
-import { Dispatch, ReactNode, SetStateAction } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ReactNode } from "react";
+import { getPanelMeta, panelNavigation } from "@/lib/panel-navigation";
 
-interface NavItem<T extends string = string> {
-  id: T;
-  label: string;
-  icon?: ReactNode;
-}
-
-interface AppShellProps<T extends string = string> {
-  title: string;
-  subtitle?: string;
-  navigation: NavItem<T>[];
-  active: T;
-  onNavigate: Dispatch<SetStateAction<T>>;
+interface AppShellProps {
   children: ReactNode;
 }
 
-export function AppShell<T extends string>({
-  title,
-  subtitle,
-  navigation,
-  active,
-  onNavigate,
-  children,
-}: AppShellProps<T>) {
+export function AppShell({ children }: AppShellProps) {
+  const pathname = usePathname();
+  const currentPage = getPanelMeta(pathname);
+
   return (
     <div className="min-h-screen">
       <div className="flex min-h-screen gap-6 px-4 py-6 lg:px-10 lg:py-10">
@@ -34,19 +22,21 @@ export function AppShell<T extends string>({
               <p className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-600">
                 SIGO
               </p>
-              <h1 className="mt-3 text-2xl font-semibold text-slate-900">Painel de Controle</h1>
+              <h1 className="mt-3 text-2xl font-semibold text-slate-900">
+                Navegação do Sistema
+              </h1>
               <p className="mt-2 text-sm text-slate-500">
-                Acompanhe clientes, veículos, ordens de serviço e equipe.
+                Acesse cada módulo em uma página própria.
               </p>
             </div>
             <nav className="flex flex-col gap-2">
-              {navigation.map((item) => {
-                const isActive = item.id === active;
+              {panelNavigation.map((item) => {
+                const isActive = item.href === pathname;
+
                 return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => onNavigate(item.id)}
+                  <Link
+                    key={item.href}
+                    href={item.href}
                     className={`flex items-center justify-between rounded-xl border px-4 py-3 text-sm font-medium transition ${
                       isActive
                         ? "border-blue-500 bg-blue-50 text-blue-700 shadow"
@@ -59,30 +49,53 @@ export function AppShell<T extends string>({
                       </span>
                       {item.label}
                     </span>
-                    <span className="text-xs text-slate-400">{isActive ? "Ver" : "Ir"}</span>
-                  </button>
+                    <span className="text-xs text-slate-400">
+                      {isActive ? "Aberta" : "Abrir"}
+                    </span>
+                  </Link>
                 );
               })}
             </nav>
             <div className="rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 p-6 text-white">
-              <p className="text-sm font-medium">Precisa de ajuda?</p>
+              <p className="text-sm font-medium">Atalho rápido</p>
               <p className="mt-1 text-xs text-white/70">
-                Consulte os relatórios e acompanhe os indicadores em tempo real.
+                Use o menu para trocar de página sem depender de uma section interna.
               </p>
             </div>
           </div>
         </aside>
         <main className="flex-1">
+          <nav className="mb-4 flex gap-2 overflow-x-auto lg:hidden">
+            {panelNavigation.map((item) => {
+              const isActive = item.href === pathname;
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm font-medium transition ${
+                    isActive
+                      ? "border-blue-500 bg-blue-50 text-blue-700"
+                      : "border-slate-200 bg-white text-slate-500 hover:border-blue-200 hover:text-blue-700"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
           <header className="mb-8 flex flex-col gap-2 rounded-3xl bg-white/80 p-6 shadow-lg shadow-blue-500/10 backdrop-blur">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-600">
-                  SIGO Dashboard
+                  SIGO
                 </p>
-                <h2 className="mt-1 text-3xl font-semibold text-slate-900">{title}</h2>
-                {subtitle && (
-                  <p className="mt-2 max-w-2xl text-sm text-slate-500">{subtitle}</p>
-                )}
+                <h2 className="mt-1 text-3xl font-semibold text-slate-900">
+                  {currentPage.title}
+                </h2>
+                <p className="mt-2 max-w-2xl text-sm text-slate-500">
+                  {currentPage.subtitle}
+                </p>
               </div>
             </div>
           </header>

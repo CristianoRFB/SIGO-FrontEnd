@@ -86,7 +86,7 @@ export function OverviewSection() {
   }, [data.servicos]);
 
   const veiculosEmAndamento = useMemo(() => {
-    return data.veiculos.filter((veiculo) => veiculo.Status !== 3).length;
+    return data.veiculos.filter((veiculo) => veiculo.Situacao === 1).length;
   }, [data.veiculos]);
 
   return (
@@ -99,9 +99,9 @@ export function OverviewSection() {
           trend={{ value: "+8%", label: "vs. mês anterior", positive: true }}
         />
         <StatCard
-          title="Equipe"
+          title="Funcionarios"
           value={loading ? "--" : String(data.funcionarios.length)}
-          helper="Colaboradores cadastrados"
+          helper="Funcionarios cadastrados"
         />
         <StatCard
           title="Serviços registrados"
@@ -166,19 +166,15 @@ export function OverviewSection() {
             { header: "Placa", key: "PlacaVeiculo", width: "120px" },
             { header: "Combustível", key: "Combustivel" },
             {
-              header: "Status",
-              key: "Status",
+              header: "Situacao",
+              key: "Situacao",
               render: (item) => (
                 <span
                   className={`badge ${
-                    item.Status === 3
-                      ? "badge-success"
-                      : item.Status === 2
-                      ? "badge-warning"
-                      : ""
+                    item.Situacao === 1 ? "badge-success" : "badge-warning"
                   }`.trim()}
                 >
-                  {resolveStatusVeiculo(item.Status)}
+                  {resolveStatusVeiculo(item.Situacao)}
                 </span>
               ),
             },

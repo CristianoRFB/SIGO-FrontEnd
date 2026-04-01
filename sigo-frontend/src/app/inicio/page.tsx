@@ -68,7 +68,7 @@ export default function LandingPage() {
             </p>
             <div>
               <Link
-                href="/dashboard"
+                href="/visao-geral"
                 className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700"
               >
                 Veja as Opções
@@ -102,7 +102,7 @@ export default function LandingPage() {
               Nosso sistema vem preparado com máxima eficácia e precisão para os clientes customizarem seus carros.
             </p>
             <Link
-              href="/dashboard"
+              href="/visao-geral"
               className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700"
             >
               Saiba mais
@@ -135,7 +135,7 @@ export default function LandingPage() {
               Feito para eliminar papeletas desnecessárias e evitar conflitos burocráticos.
             </p>
             <Link
-              href="/dashboard"
+              href="/visao-geral"
               className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700"
             >
               Saiba mais
@@ -154,7 +154,7 @@ export default function LandingPage() {
               Deixar os clientes satisfeitos é nosso principal objetivo.
             </p>
             <Link
-              href="/dashboard"
+              href="/visao-geral"
               className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700"
             >
               Saiba mais

@@ -1,46 +1,61 @@
 import { ApiResponse, Cor } from "@/types/entities";
 import { apiFetch } from "./api-client";
-import { BACKEND_API_BASE_URL } from "@/lib/config";
+import { buildBackendUrl } from "@/lib/config";
 
-const BASE_URL = `${BACKEND_API_BASE_URL}/Cor`;
+const BASE_URL = buildBackendUrl("Cor");
 
-// Lista todas as cores
-export async function listCores(): Promise<Cor[]> {
-  const payload = await apiFetch(BASE_URL);
-  return normalize(payload?.data);
+type RawCor = Record<string, unknown>;
+
+function normalizeCor(value: RawCor): Cor {
+  return {
+    Id: Number(value.Id ?? value.id ?? 0),
+    NomeCor: String(value.NomeCor ?? value.nomeCor ?? ""),
+  };
 }
 
-// Cria uma nova cor
+function normalizeCorList(payload: unknown): Cor[] {
+  const rawData = isApiResponse(payload) ? payload.data : payload;
+
+  if (!rawData) {
+    return [];
+  }
+
+  const items = Array.isArray(rawData) ? rawData : [rawData];
+  return items
+    .filter((item): item is RawCor => !!item && typeof item === "object")
+    .map(normalizeCor);
+}
+
+export async function listCores(): Promise<Cor[]> {
+  const payload = await apiFetch(BASE_URL);
+  return normalizeCorList(payload);
+}
+
 export async function createCor(cor: Partial<Cor>): Promise<ApiResponse<Cor>> {
   return apiFetch(BASE_URL, {
     method: "POST",
     body: JSON.stringify(cor),
-  });
+  }) as Promise<ApiResponse<Cor>>;
 }
 
-// Atualiza uma cor existente
 export async function updateCor(id: number, cor: Partial<Cor>): Promise<ApiResponse<Cor>> {
   return apiFetch(`${BASE_URL}/${id}`, {
     method: "PUT",
     body: JSON.stringify(cor),
-  });
+  }) as Promise<ApiResponse<Cor>>;
 }
 
-// Deleta uma cor pelo ID
 export async function deleteCor(id: number): Promise<ApiResponse<null>> {
   return apiFetch(`${BASE_URL}/${id}`, {
     method: "DELETE",
-  });
+  }) as Promise<ApiResponse<null>>;
 }
 
-// Busca cores pelo nome
 export async function searchCorByNome(nome: string): Promise<Cor[]> {
-  const payload = await apiFetch(`${BASE_URL}/nome/${encodeURIComponent(nome)}`);
-  return normalize(payload?.data);
+  const payload = await apiFetch(`${BASE_URL}/name/${encodeURIComponent(nome)}`);
+  return normalizeCorList(payload);
 }
 
-// Normaliza data para sempre retornar array
-function normalize(data: Cor[] | Cor | null | undefined): Cor[] {
-  if (!data) return [];
-  return Array.isArray(data) ? data : [data];
+function isApiResponse(value: unknown): value is ApiResponse<unknown> {
+  return !!value && typeof value === "object" && "code" in value && "data" in value;
 }

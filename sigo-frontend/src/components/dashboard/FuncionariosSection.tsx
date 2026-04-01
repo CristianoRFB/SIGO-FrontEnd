@@ -17,6 +17,7 @@ interface FormState {
   Cpf: string;
   Cargo: string;
   Email: string;
+  Senha: string;
   Situacao: string;
 }
 
@@ -25,6 +26,7 @@ const initialForm: FormState = {
   Cpf: "",
   Cargo: "",
   Email: "",
+  Senha: "",
   Situacao: "1",
 };
 
@@ -47,9 +49,8 @@ export function FuncionariosSection() {
       setLoading(true);
       const data = await listFuncionarios();
       setFuncionarios(data);
-    } catch (error) {
-      //console.error(error);
-      setFeedback("Não foi possível carregar os colaboradores.");
+    } catch {
+      setFeedback("Nao foi possivel carregar os colaboradores.");
     } finally {
       setLoading(false);
     }
@@ -62,8 +63,7 @@ export function FuncionariosSection() {
   }
 
   function openModalForCreate() {
-    setEditingId(null);
-    setForm(initialForm);
+    resetForm();
     setShowModal(true);
   }
 
@@ -74,6 +74,7 @@ export function FuncionariosSection() {
       Cpf: funcionario.Cpf ?? "",
       Cargo: funcionario.Cargo ?? "",
       Email: funcionario.Email ?? "",
+      Senha: funcionario.Senha ?? "",
       Situacao: String(funcionario.Situacao ?? 1),
     });
     setShowModal(true);
@@ -89,6 +90,7 @@ export function FuncionariosSection() {
       Cpf: form.Cpf,
       Cargo: form.Cargo,
       Email: form.Email,
+      Senha: form.Senha,
       Situacao: Number(form.Situacao),
     };
 
@@ -102,9 +104,8 @@ export function FuncionariosSection() {
       }
       await refresh();
       resetForm();
-    } catch (error) {
-      //console.error(error);
-      setFeedback("Não foi possível salvar o colaborador.");
+    } catch {
+      setFeedback("Nao foi possivel salvar o colaborador.");
     } finally {
       setSubmitting(false);
     }
@@ -114,13 +115,13 @@ export function FuncionariosSection() {
     if (!window.confirm(`Remover ${funcionario.Nome}?`)) {
       return;
     }
+
     try {
       await deleteFuncionario(funcionario.Id);
       setFeedback("Colaborador removido.");
       await refresh();
-    } catch (error) {
-      //console.error(error);
-      setFeedback("Não foi possível remover o colaborador.");
+    } catch {
+      setFeedback("Nao foi possivel remover o colaborador.");
     }
   }
 
@@ -128,7 +129,9 @@ export function FuncionariosSection() {
     if (!search.trim()) {
       return funcionarios;
     }
+
     const term = search.toLowerCase();
+
     return funcionarios.filter((item) =>
       [item.Nome, item.Email, item.Cargo]
         .filter(Boolean)
@@ -139,8 +142,8 @@ export function FuncionariosSection() {
   return (
     <div className="space-y-6">
       <SectionHeader
-        title="Equipe"
-        description="Gerencie dados dos colaboradores, cargos e situação."
+        title="Funcionarios"
+        description="Gerencie dados dos funcionarios, cargos e situacao."
         actionSlot={
           <div className="flex items-center gap-3">
             <button
@@ -167,73 +170,81 @@ export function FuncionariosSection() {
         </div>
       )}
 
-      <div className="grid gap-6">
-        <DataTable
-          data={filtered}
-          columns={[
-            { header: "Nome", key: "Nome" },
-            { header: "Cargo", key: "Cargo" },
-            { header: "E-mail", key: "Email" },
-            { header: "CPF", key: "Cpf", width: "140px" },
-            {
-              header: "Situação",
-              key: "Situacao",
-              render: (item) => (
-                <span
-                  className={`badge ${
-                    item.Situacao === 1 ? "badge-success" : "badge-warning"
-                  }`}
+      <DataTable
+        data={filtered}
+        columns={[
+          { header: "Nome", key: "Nome" },
+          { header: "Cargo", key: "Cargo" },
+          { header: "E-mail", key: "Email" },
+          { header: "CPF", key: "Cpf", width: "140px" },
+          {
+            header: "Situacao",
+            key: "Situacao",
+            render: (item) => (
+              <span
+                className={`badge ${
+                  item.Situacao === 1 ? "badge-success" : "badge-warning"
+                }`}
+              >
+                {situacaoOptions.find((option) => option.value === item.Situacao)?.label}
+              </span>
+            ),
+          },
+          {
+            header: "Acoes",
+            key: "Id",
+            render: (item) => (
+              <div className="flex gap-2 text-xs">
+                <button
+                  type="button"
+                  onClick={() => populateForm(item)}
+                  className="rounded-lg border border-emerald-200 px-3 py-1 font-medium text-emerald-600 hover:bg-emerald-50"
                 >
-                  {
-                    situacaoOptions.find((option) => option.value === item.Situacao)
-                      ?.label
-                  }
-                </span>
-              ),
-            },
-            {
-              header: "Ações",
-              key: "Id",
-              render: (item) => (
-                <div className="flex gap-2 text-xs">
-                  <button
-                    type="button"
-                    onClick={() => populateForm(item)}
-                    className="rounded-lg border border-emerald-200 px-3 py-1 font-medium text-emerald-600 hover:bg-emerald-50"
-                  >
-                    Editar
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(item)}
-                    className="rounded-lg border border-rose-200 px-3 py-1 font-medium text-rose-600 hover:bg-rose-50"
-                  >
-                    Remover
-                  </button>
-                </div>
-              ),
-            },
-          ]}
-          emptyMessage={
-            loading ? "Carregando equipe..." : "Nenhum colaborador cadastrado"
-          }
-          getRowId={(item) => item.Id}
-        />
-      </div>
+                  Editar
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(item)}
+                  className="rounded-lg border border-rose-200 px-3 py-1 font-medium text-rose-600 hover:bg-rose-50"
+                >
+                  Remover
+                </button>
+              </div>
+            ),
+          },
+        ]}
+        emptyMessage={loading ? "Carregando funcionarios..." : "Nenhum funcionario cadastrado"}
+        getRowId={(item) => item.Id}
+      />
+
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/40" onClick={() => setShowModal(false)} />
-          <div className="relative z-10 w-full max-w-lg rounded-xl bg-white shadow-lg flex flex-col max-h-[90vh]">
-            <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4 flex-shrink-0">
+          <div className="relative z-10 flex max-h-[90vh] w-full max-w-lg flex-col rounded-xl bg-white shadow-lg">
+            <div className="flex shrink-0 items-center justify-between border-b border-slate-200 px-6 py-4">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">{editingId ? 'Editar' : 'Novo'} Colaborador</p>
-                <h3 className="mt-2 text-lg font-semibold text-slate-900">{editingId ? 'Atualize as informações' : 'Preencha os dados'}</h3>
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-600">
+                  {editingId ? "Editar" : "Novo"} Colaborador
+                </p>
+                <h3 className="mt-2 text-lg font-semibold text-slate-900">
+                  {editingId ? "Atualize as informacoes" : "Preencha os dados"}
+                </h3>
               </div>
-              <button type="button" onClick={() => setShowModal(false)} className="text-slate-500 hover:text-slate-700">Fechar</button>
+              <button
+                type="button"
+                onClick={() => setShowModal(false)}
+                className="text-slate-500 hover:text-slate-700"
+              >
+                Fechar
+              </button>
             </div>
-            <form className="mt-0 space-y-4 px-6 py-4 overflow-y-auto" id="funcionario-form" onSubmit={handleSubmit}>
+            <form
+              id="funcionario-form"
+              className="mt-0 space-y-4 overflow-y-auto px-6 py-4"
+              onSubmit={handleSubmit}
+            >
               <div>
-                <label className="block text-xs font-semibold text-slate-400">Nome</label>
+                <label className="block text-xs font-semibold text-slate-400">Nome completo</label>
                 <input
                   required
                   value={form.Nome}
@@ -241,23 +252,25 @@ export function FuncionariosSection() {
                   className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
                 />
               </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-400">CPF</label>
-                <input
-                  required
-                  value={form.Cpf}
-                  onChange={(event) => setForm((prev) => ({ ...prev, Cpf: event.target.value }))}
-                  className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-400">Cargo</label>
-                <input
-                  required
-                  value={form.Cargo}
-                  onChange={(event) => setForm((prev) => ({ ...prev, Cargo: event.target.value }))}
-                  className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
-                />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-400">CPF</label>
+                  <input
+                    required
+                    value={form.Cpf}
+                    onChange={(event) => setForm((prev) => ({ ...prev, Cpf: event.target.value }))}
+                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-400">Cargo</label>
+                  <input
+                    required
+                    value={form.Cargo}
+                    onChange={(event) => setForm((prev) => ({ ...prev, Cargo: event.target.value }))}
+                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                  />
+                </div>
               </div>
               <div>
                 <label className="block text-xs font-semibold text-slate-400">E-mail</label>
@@ -270,7 +283,17 @@ export function FuncionariosSection() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400">Situação</label>
+                <label className="block text-xs font-semibold text-slate-400">Senha</label>
+                <input
+                  required
+                  type="password"
+                  value={form.Senha}
+                  onChange={(event) => setForm((prev) => ({ ...prev, Senha: event.target.value }))}
+                  className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-400">Situacao</label>
                 <select
                   value={form.Situacao}
                   onChange={(event) => setForm((prev) => ({ ...prev, Situacao: event.target.value }))}
@@ -284,9 +307,13 @@ export function FuncionariosSection() {
                 </select>
               </div>
             </form>
-            <div className="flex items-center gap-3 justify-end border-t border-slate-200 px-6 py-4 flex-shrink-0">
-              <button type="button" onClick={() => setShowModal(false)} className="rounded-xl border border-slate-200 px-4 py-2 text-sm">Cancelar</button>
-              <button type="submit" form="funcionario-form" disabled={submitting} className="rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600 disabled:opacity-60">{submitting ? 'Salvando...' : editingId ? 'Atualizar' : 'Cadastrar'}</button>
+            <div className="flex shrink-0 items-center justify-end gap-3 border-t border-slate-200 px-6 py-4">
+              <button type="button" onClick={() => setShowModal(false)} className="rounded-xl border border-slate-200 px-4 py-2 text-sm">
+                Cancelar
+              </button>
+              <button type="submit" form="funcionario-form" disabled={submitting} className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60">
+                {submitting ? "Salvando..." : editingId ? "Atualizar" : "Cadastrar"}
+              </button>
             </div>
           </div>
         </div>

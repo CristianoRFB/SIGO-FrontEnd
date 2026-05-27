@@ -10,3 +10,23 @@
  ✓ Starting...
  ✓ Ready in 4.6s
  ○ Compiling /_not-found/page ...
+ GET /login:%20200 404 in 24.0s (compile: 22.8s, render: 1222ms)
+ GET /login 200 in 24.7s (compile: 24.2s, render: 519ms)
+ GET /visao-geral 200 in 31.8s (compile: 31.5s, render: 328ms)
+ GET /login 200 in 92ms (compile: 7ms, render: 85ms)
+ GET /login 200 in 66ms (compile: 5ms, render: 61ms)
+ GET /login 200 in 74ms (compile: 6ms, render: 68ms)
+ GET / 307 in 459ms (compile: 379ms, render: 80ms)
+ GET /inicio 200 in 806ms (compile: 671ms, render: 135ms)
+ GET /login 200 in 80ms (compile: 6ms, render: 74ms)
+ GET /login:%20200 404 in 81ms (compile: 19ms, render: 62ms)
+ GET /visao-geral 200 in 54ms (compile: 5ms, render: 49ms)
+ GET /clientes 200 in 366ms (compile: 318ms, render: 49ms)
+ GET /funcionarios 200 in 386ms (compile: 350ms, render: 36ms)
+ GET /funcionarios 200 in 29ms (compile: 6ms, render: 24ms)
+ GET /cadastro 200 in 81ms (compile: 4ms, render: 77ms)
+ GET /servicos 200 in 355ms (compile: 322ms, render: 34ms)
+ GET /veiculos 200 in 331ms (compile: 300ms, render: 31ms)
+ GET /marcas 200 in 349ms (compile: 307ms, render: 42ms)
+ GET /veiculos 200 in 309ms (compile: 135ms, render: 174ms)
+ GET /visao-geral 200 in 53ms (compile: 23ms, render: 30ms)

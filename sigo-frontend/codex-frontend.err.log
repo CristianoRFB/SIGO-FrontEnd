@@ -6,3 +6,4 @@
  Detected additional lockfiles: 
    * C:\Users\MICRO-10\Downloads\Svekte\77\É algo mais sério\Fatec\SIGO\SIGO-FrontEnd\sigo-frontend\package-lock.json
 
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`

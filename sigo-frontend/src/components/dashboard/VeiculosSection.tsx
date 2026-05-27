@@ -242,7 +242,7 @@ export function VeiculosSection() {
             <button
               type="button"
               onClick={openModalForCreate}
-              className="rounded-lg bg-emerald-500 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-600"
+              className="button-primary"
             >
               Novo veiculo
             </button>
@@ -251,20 +251,20 @@ export function VeiculosSection() {
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Buscar por placa, modelo, cor ou cliente"
-              className="w-80 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+              className="toolbar-search w-80"
             />
           </div>
         }
       />
 
       {clientes.length === 0 && !loading && (
-        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+        <div className="feedback-warning">
           Nenhum cliente cadastrado. Cadastre um cliente antes de criar um veiculo.
         </div>
       )}
 
       {feedback && (
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+        <div className="feedback-success">
           {feedback}
         </div>
       )}
@@ -301,14 +301,14 @@ export function VeiculosSection() {
                 <button
                   type="button"
                   onClick={() => populateForm(item)}
-                  className="rounded-lg border border-emerald-200 px-3 py-1 font-medium text-emerald-600 hover:bg-emerald-50"
+                  className="button-inline"
                 >
                   Editar
                 </button>
                 <button
                   type="button"
                   onClick={() => handleDelete(item)}
-                  className="rounded-lg border border-rose-200 px-3 py-1 font-medium text-rose-600 hover:bg-rose-50"
+                  className="button-inline-danger"
                 >
                   Remover
                 </button>
@@ -321,10 +321,10 @@ export function VeiculosSection() {
       />
 
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setShowModal(false)} />
-          <div className="relative z-10 flex max-h-[90vh] w-full max-w-2xl flex-col rounded-xl bg-white shadow-lg">
-            <div className="flex shrink-0 items-center justify-between border-b border-slate-200 px-6 py-4">
+        <div className="modal-overlay">
+          <div className="modal-scrim" onClick={() => setShowModal(false)} />
+          <div className="modal-card max-w-2xl">
+            <div className="modal-header">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-600">
                   {editingId ? "Editar" : "Novo"} Veiculo
@@ -333,104 +333,104 @@ export function VeiculosSection() {
                   {editingId ? "Atualize os dados" : "Preencha os dados"}
                 </h3>
               </div>
-              <button type="button" onClick={() => setShowModal(false)} className="text-slate-500 hover:text-slate-700">
+              <button type="button" onClick={() => setShowModal(false)} className="button-ghost">
                 Fechar
               </button>
             </div>
-            <form id="veiculo-form" className="mt-0 space-y-4 overflow-y-auto px-6 py-4" onSubmit={handleSubmit}>
+            <form id="veiculo-form" className="modal-body" onSubmit={handleSubmit}>
               <div>
-                <label className="block text-xs font-semibold text-slate-400">Nome / Modelo</label>
+                <label className="field-label">Nome / Modelo</label>
                 <input
                   required
                   value={form.NomeVeiculo}
                   onChange={(event) => setForm((prev) => ({ ...prev, NomeVeiculo: event.target.value }))}
-                  className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                  className="field-input mt-2"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Placa</label>
+                  <label className="field-label">Placa</label>
                   <input
                     required
                     value={form.PlacaVeiculo}
                     onChange={(event) => setForm((prev) => ({ ...prev, PlacaVeiculo: event.target.value.toUpperCase() }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm uppercase"
+                    className="field-input mt-2 uppercase"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Chassi</label>
+                  <label className="field-label">Chassi</label>
                   <input
                     value={form.ChassiVeiculo}
                     onChange={(event) => setForm((prev) => ({ ...prev, ChassiVeiculo: event.target.value.toUpperCase() }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm uppercase"
+                    className="field-input mt-2 uppercase"
                   />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Tipo</label>
+                  <label className="field-label">Tipo</label>
                   <input
                     value={form.TipoVeiculo}
                     onChange={(event) => setForm((prev) => ({ ...prev, TipoVeiculo: event.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    className="field-input mt-2"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Ano fabricacao</label>
+                  <label className="field-label">Ano fabricacao</label>
                   <input
                     type="number"
                     value={form.AnoFab}
                     onChange={(event) => setForm((prev) => ({ ...prev, AnoFab: event.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    className="field-input mt-2"
                   />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Quilometragem</label>
+                  <label className="field-label">Quilometragem</label>
                   <input
                     type="number"
                     value={form.Quilometragem}
                     onChange={(event) => setForm((prev) => ({ ...prev, Quilometragem: event.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    className="field-input mt-2"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Combustivel</label>
+                  <label className="field-label">Combustivel</label>
                   <input
                     value={form.Combustivel}
                     onChange={(event) => setForm((prev) => ({ ...prev, Combustivel: event.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    className="field-input mt-2"
                   />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Seguro</label>
+                  <label className="field-label">Seguro</label>
                   <input
                     value={form.Seguro}
                     onChange={(event) => setForm((prev) => ({ ...prev, Seguro: event.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    className="field-input mt-2"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Cor</label>
+                  <label className="field-label">Cor</label>
                   <input
                     required
                     value={form.Cor}
                     onChange={(event) => setForm((prev) => ({ ...prev, Cor: event.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    className="field-input mt-2"
                   />
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Cliente</label>
+                  <label className="field-label">Cliente</label>
                   <select
                     required
                     value={form.ClienteId}
                     onChange={(event) => setForm((prev) => ({ ...prev, ClienteId: event.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    className="field-select mt-2"
                   >
                     <option value="">Selecione o cliente</option>
                     {clientes.map((cliente) => (
@@ -441,17 +441,17 @@ export function VeiculosSection() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">CorId</label>
+                  <label className="field-label">CorId</label>
                   <input
                     type="number"
                     value={form.CorId}
                     onChange={(event) => setForm((prev) => ({ ...prev, CorId: event.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    className="field-input mt-2"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-xs font-semibold text-slate-400">Status</label>
-                  <select value={form.Situacao} onChange={(event) => setForm((prev) => ({ ...prev, Situacao: event.target.value }))} className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm">
+                  <label className="field-label">Status</label>
+                  <select value={form.Situacao} onChange={(event) => setForm((prev) => ({ ...prev, Situacao: event.target.value }))} className="field-select mt-2">
                     {statusVeiculoOptions.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
@@ -461,11 +461,11 @@ export function VeiculosSection() {
                 </div>
               </div>
             </form>
-            <div className="flex shrink-0 items-center justify-end gap-3 border-t border-slate-200 px-6 py-4">
-              <button type="button" onClick={() => setShowModal(false)} className="rounded-xl border border-slate-200 px-4 py-2 text-sm">
+            <div className="modal-footer">
+              <button type="button" onClick={() => setShowModal(false)} className="button-cancel">
                 Cancelar
               </button>
-              <button type="submit" form="veiculo-form" disabled={submitting || clientes.length === 0} className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60">
+              <button type="submit" form="veiculo-form" disabled={submitting || clientes.length === 0} className="button-success disabled:opacity-60">
                 {submitting ? "Salvando..." : editingId ? "Atualizar" : "Cadastrar"}
               </button>
             </div>
@@ -475,3 +475,4 @@ export function VeiculosSection() {
     </div>
   );
 }
+

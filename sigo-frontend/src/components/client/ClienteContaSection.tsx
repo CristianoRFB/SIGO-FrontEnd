@@ -238,7 +238,7 @@ export function ClienteContaSection() {
                 setEditing((currentEditing) => !currentEditing);
                 setForm(toContaForm(cliente));
               }}
-              className="rounded-2xl border border-blue-200 px-4 py-3 text-sm font-semibold text-blue-700 transition hover:bg-blue-50"
+              className={editing ? "button-cancel" : "button-secondary"}
             >
               {editing ? "Cancelar edicao" : "Editar dados"}
             </button>
@@ -246,19 +246,19 @@ export function ClienteContaSection() {
         />
 
         {feedback && (
-          <div className="rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-700">
+          <div className="feedback-info">
             {feedback}
           </div>
         )}
 
         {error && (
-          <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-600">
+          <div className="feedback-danger">
             {error}
           </div>
         )}
 
         <div className="grid gap-4 lg:grid-cols-3">
-          <div className="rounded-[28px] border border-blue-100 bg-blue-50/60 p-5">
+          <div className="surface-highlight">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blue-600">
               Identificacao
             </p>
@@ -267,7 +267,7 @@ export function ClienteContaSection() {
             <p className="mt-2 text-sm text-slate-600">{formatPhoneList(cliente.Telefones)}</p>
           </div>
 
-          <div className="rounded-[28px] border border-slate-200 bg-white p-5">
+          <div className="app-subcard">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blue-600">
               Cadastro
             </p>
@@ -291,7 +291,7 @@ export function ClienteContaSection() {
             </div>
           </div>
 
-          <div className="rounded-[28px] border border-slate-200 bg-white p-5">
+          <div className="app-subcard">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blue-600">
               Endereco
             </p>
@@ -317,7 +317,7 @@ export function ClienteContaSection() {
               value={form.Nome}
               disabled={!editing}
               onChange={(event) => setForm({ ...form, Nome: event.target.value })}
-              className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm disabled:bg-slate-50"
+              className="field-input"
             />
           </label>
 
@@ -328,7 +328,7 @@ export function ClienteContaSection() {
               value={form.Email}
               disabled={!editing}
               onChange={(event) => setForm({ ...form, Email: event.target.value })}
-              className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm disabled:bg-slate-50"
+              className="field-input"
             />
           </label>
         </div>
@@ -340,7 +340,7 @@ export function ClienteContaSection() {
               value={form.Rua}
               disabled={!editing}
               onChange={(event) => setForm({ ...form, Rua: event.target.value })}
-              className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm disabled:bg-slate-50"
+              className="field-input"
             />
           </label>
 
@@ -350,7 +350,7 @@ export function ClienteContaSection() {
               value={form.Numero}
               disabled={!editing}
               onChange={(event) => setForm({ ...form, Numero: event.target.value })}
-              className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm disabled:bg-slate-50"
+              className="field-input"
             />
           </label>
 
@@ -360,7 +360,7 @@ export function ClienteContaSection() {
               value={form.Bairro}
               disabled={!editing}
               onChange={(event) => setForm({ ...form, Bairro: event.target.value })}
-              className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm disabled:bg-slate-50"
+              className="field-input"
             />
           </label>
         </div>
@@ -372,7 +372,7 @@ export function ClienteContaSection() {
               value={form.Cidade}
               disabled={!editing}
               onChange={(event) => setForm({ ...form, Cidade: event.target.value })}
-              className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm disabled:bg-slate-50"
+              className="field-input"
             />
           </label>
 
@@ -382,7 +382,7 @@ export function ClienteContaSection() {
               value={form.Estado}
               disabled={!editing}
               onChange={(event) => setForm({ ...form, Estado: event.target.value })}
-              className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm disabled:bg-slate-50"
+              className="field-input"
             />
           </label>
 
@@ -392,7 +392,7 @@ export function ClienteContaSection() {
               value={form.Cep}
               disabled={!editing}
               onChange={(event) => setForm({ ...form, Cep: event.target.value })}
-              className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm disabled:bg-slate-50"
+              className="field-input"
             />
           </label>
 
@@ -402,7 +402,7 @@ export function ClienteContaSection() {
               value={form.Pais}
               disabled={!editing}
               onChange={(event) => setForm({ ...form, Pais: event.target.value })}
-              className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm disabled:bg-slate-50"
+              className="field-input"
             />
           </label>
         </div>
@@ -414,7 +414,7 @@ export function ClienteContaSection() {
               value={form.Complemento}
               disabled={!editing}
               onChange={(event) => setForm({ ...form, Complemento: event.target.value })}
-              className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm disabled:bg-slate-50"
+              className="field-input"
             />
           </label>
 
@@ -424,7 +424,7 @@ export function ClienteContaSection() {
               value={form.razao}
               disabled={!editing}
               onChange={(event) => setForm({ ...form, razao: event.target.value })}
-              className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm disabled:bg-slate-50"
+              className="field-input"
             />
           </label>
         </div>
@@ -436,7 +436,7 @@ export function ClienteContaSection() {
             disabled={!editing}
             onChange={(event) => setForm({ ...form, Obs: event.target.value })}
             rows={3}
-            className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm disabled:bg-slate-50"
+            className="field-textarea"
           />
         </label>
 
@@ -447,7 +447,7 @@ export function ClienteContaSection() {
               <button
                 type="button"
                 onClick={addPhone}
-                className="rounded-full border border-blue-200 px-3 py-1.5 text-xs font-semibold text-blue-700 transition hover:bg-blue-50"
+                className="button-inline"
               >
                 Adicionar telefone
               </button>
@@ -467,13 +467,13 @@ export function ClienteContaSection() {
                     disabled={!editing}
                     onChange={(event) => updatePhone(index, event.target.value)}
                     placeholder="(00) 00000-0000"
-                    className="flex-1 rounded-2xl border border-slate-200 px-4 py-3 text-sm disabled:bg-slate-50"
+                    className="field-input flex-1"
                   />
                   {editing && (
                     <button
                       type="button"
                       onClick={() => removePhone(index)}
-                      className="rounded-2xl border border-rose-200 px-4 py-3 text-sm font-semibold text-rose-600 transition hover:bg-rose-50"
+                      className="button-danger"
                     >
                       Remover
                     </button>
@@ -492,7 +492,7 @@ export function ClienteContaSection() {
               setEditing(false);
               setForm(toContaForm(cliente));
             }}
-            className="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+            className="button-cancel disabled:opacity-60"
           >
             Descartar
           </button>
@@ -500,7 +500,7 @@ export function ClienteContaSection() {
             type="button"
             disabled={!editing || saving}
             onClick={handleSave}
-            className="rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
+            className="button-success disabled:opacity-70"
           >
             {saving ? "Salvando..." : "Salvar alteracoes"}
           </button>
@@ -509,3 +509,4 @@ export function ClienteContaSection() {
     </div>
   );
 }
+

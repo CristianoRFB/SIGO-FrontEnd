@@ -150,7 +150,7 @@ export default function CadastroPage() {
       }
     >
       <form
-        className="mt-12 space-y-7 rounded-[30px] border border-blue-100/80 bg-white/85 p-5 shadow-[0_28px_70px_-44px_rgba(37,99,235,0.35)] backdrop-blur-sm sm:p-6 lg:p-7 [&_input]:min-h-[3.35rem] [&_select]:min-h-[3.35rem]"
+        className="mt-12 space-y-7 rounded-[20px] border border-slate-200/80 bg-white/92 p-5 shadow-[0_24px_60px_-38px_rgba(15,23,42,0.28)] sm:p-6 lg:p-7"
         onSubmit={handleSubmit}
       >
         <div className="grid gap-6 sm:grid-cols-2">
@@ -163,7 +163,7 @@ export default function CadastroPage() {
               value={form.Nome}
               onChange={(event) => setForm((current) => ({ ...current, Nome: event.target.value }))}
               placeholder="Digite seu nome"
-              className="w-full rounded-2xl border border-blue-100 bg-blue-50/40 px-4 py-3.5 text-sm text-slate-900 shadow-[0_12px_30px_-24px_rgba(37,99,235,0.35)] transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100"
+              className="field-input"
               autoComplete="name"
             />
           </label>
@@ -179,7 +179,7 @@ export default function CadastroPage() {
                   TipoCliente: Number(event.target.value),
                 }))
               }
-              className="w-full rounded-2xl border border-blue-100 bg-blue-50/40 px-4 py-3.5 text-sm text-slate-900 shadow-[0_12px_30px_-24px_rgba(37,99,235,0.35)] transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100"
+              className="field-select"
             >
               {tipoClienteOptions.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -200,7 +200,7 @@ export default function CadastroPage() {
                   Sexo: Number(event.target.value),
                 }))
               }
-              className="w-full rounded-2xl border border-blue-100 bg-blue-50/40 px-4 py-3.5 text-sm text-slate-900 shadow-[0_12px_30px_-24px_rgba(37,99,235,0.35)] transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100"
+              className="field-select"
             >
               {sexoOptions.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -224,7 +224,7 @@ export default function CadastroPage() {
                 }))
               }
               placeholder={`Digite seu ${documentoLabel}`}
-              className="w-full rounded-2xl border border-blue-100 bg-blue-50/40 px-4 py-3.5 text-sm text-slate-900 shadow-[0_12px_30px_-24px_rgba(37,99,235,0.35)] transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100"
+              className="field-input"
               autoComplete="off"
             />
           </label>
@@ -242,7 +242,7 @@ export default function CadastroPage() {
                   DataNasc: event.target.value,
                 }))
               }
-              className="w-full rounded-2xl border border-blue-100 bg-blue-50/40 px-4 py-3.5 text-sm text-slate-900 shadow-[0_12px_30px_-24px_rgba(37,99,235,0.35)] transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100"
+              className="field-select"
             />
           </label>
 
@@ -254,7 +254,7 @@ export default function CadastroPage() {
               value={form.razao}
               onChange={(event) => setForm((current) => ({ ...current, razao: event.target.value }))}
               placeholder="Opcional"
-              className="w-full rounded-2xl border border-blue-100 bg-blue-50/40 px-4 py-3.5 text-sm text-slate-900 shadow-[0_12px_30px_-24px_rgba(37,99,235,0.35)] transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100"
+              className="field-input"
             />
           </label>
 
@@ -267,7 +267,7 @@ export default function CadastroPage() {
               value={form.Email}
               onChange={(event) => setForm((current) => ({ ...current, Email: event.target.value }))}
               placeholder="seuemail@empresa.com"
-              className="w-full rounded-2xl border border-blue-100 bg-blue-50/40 px-4 py-3.5 text-sm text-slate-900 shadow-[0_12px_30px_-24px_rgba(37,99,235,0.35)] transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100"
+              className="field-input"
               autoComplete="email"
             />
           </label>
@@ -281,7 +281,7 @@ export default function CadastroPage() {
               value={form.senha}
               onChange={(event) => setForm((current) => ({ ...current, senha: event.target.value }))}
               placeholder="Crie sua senha"
-              className="w-full rounded-2xl border border-blue-100 bg-blue-50/40 px-4 py-3.5 text-sm text-slate-900 shadow-[0_12px_30px_-24px_rgba(37,99,235,0.35)] transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100"
+              className="field-input"
               autoComplete="new-password"
             />
           </label>
@@ -295,7 +295,7 @@ export default function CadastroPage() {
               value={form.Cep}
               onChange={(event) => setForm((current) => ({ ...current, Cep: event.target.value }))}
               placeholder="00000-000"
-              className="w-full rounded-2xl border border-blue-100 bg-blue-50/40 px-4 py-3.5 text-sm text-slate-900 shadow-[0_12px_30px_-24px_rgba(37,99,235,0.35)] transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100"
+              className="field-input"
               autoComplete="postal-code"
             />
           </label>
@@ -309,7 +309,7 @@ export default function CadastroPage() {
               value={form.Estado}
               onChange={(event) => setForm((current) => ({ ...current, Estado: event.target.value }))}
               placeholder="UF"
-              className="w-full rounded-2xl border border-blue-100 bg-blue-50/40 px-4 py-3.5 text-sm text-slate-900 shadow-[0_12px_30px_-24px_rgba(37,99,235,0.35)] transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100"
+              className="field-input"
               autoComplete="address-level1"
             />
           </label>
@@ -323,7 +323,7 @@ export default function CadastroPage() {
               value={form.Cidade}
               onChange={(event) => setForm((current) => ({ ...current, Cidade: event.target.value }))}
               placeholder="Sua cidade"
-              className="w-full rounded-2xl border border-blue-100 bg-blue-50/40 px-4 py-3.5 text-sm text-slate-900 shadow-[0_12px_30px_-24px_rgba(37,99,235,0.35)] transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100"
+              className="field-input"
               autoComplete="address-level2"
             />
           </label>
@@ -337,7 +337,7 @@ export default function CadastroPage() {
               value={form.Bairro}
               onChange={(event) => setForm((current) => ({ ...current, Bairro: event.target.value }))}
               placeholder="Seu bairro"
-              className="w-full rounded-2xl border border-blue-100 bg-blue-50/40 px-4 py-3.5 text-sm text-slate-900 shadow-[0_12px_30px_-24px_rgba(37,99,235,0.35)] transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100"
+              className="field-input"
             />
           </label>
 
@@ -350,7 +350,7 @@ export default function CadastroPage() {
               value={form.Rua}
               onChange={(event) => setForm((current) => ({ ...current, Rua: event.target.value }))}
               placeholder="Informe a rua"
-              className="w-full rounded-2xl border border-blue-100 bg-blue-50/40 px-4 py-3.5 text-sm text-slate-900 shadow-[0_12px_30px_-24px_rgba(37,99,235,0.35)] transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100"
+              className="field-input"
               autoComplete="street-address"
             />
           </label>
@@ -365,7 +365,7 @@ export default function CadastroPage() {
               value={form.Numero}
               onChange={(event) => setForm((current) => ({ ...current, Numero: event.target.value }))}
               placeholder="0"
-              className="w-full rounded-2xl border border-blue-100 bg-blue-50/40 px-4 py-3.5 text-sm text-slate-900 shadow-[0_12px_30px_-24px_rgba(37,99,235,0.35)] transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100"
+              className="field-input"
               autoComplete="address-line2"
             />
           </label>
@@ -384,7 +384,7 @@ export default function CadastroPage() {
                 }))
               }
               placeholder="Casa, bloco, sala..."
-              className="w-full rounded-2xl border border-blue-100 bg-blue-50/40 px-4 py-3.5 text-sm text-slate-900 shadow-[0_12px_30px_-24px_rgba(37,99,235,0.35)] transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100"
+              className="field-input"
             />
           </label>
 
@@ -397,7 +397,7 @@ export default function CadastroPage() {
               value={form.Pais}
               onChange={(event) => setForm((current) => ({ ...current, Pais: event.target.value }))}
               placeholder="Brasil"
-              className="w-full rounded-2xl border border-blue-100 bg-blue-50/40 px-4 py-3.5 text-sm text-slate-900 shadow-[0_12px_30px_-24px_rgba(37,99,235,0.35)] transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100"
+              className="field-input"
               autoComplete="country-name"
             />
           </label>
@@ -405,7 +405,7 @@ export default function CadastroPage() {
 
         {error && (
           <p
-            className="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-3.5 text-sm font-medium text-rose-600"
+            className="feedback-danger"
             aria-live="polite"
           >
             {error}
@@ -414,7 +414,7 @@ export default function CadastroPage() {
 
         {success && (
           <p
-            className="rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-3.5 text-sm font-medium text-emerald-700"
+            className="feedback-success"
             aria-live="polite"
           >
             {success}
@@ -429,7 +429,7 @@ export default function CadastroPage() {
         <button
           type="submit"
           disabled={loading}
-          className="flex w-full items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#1d4ed8,#2563eb,#60a5fa)] px-4 py-[1.125rem] text-sm font-semibold text-white shadow-[0_24px_50px_-22px_rgba(37,99,235,0.8)] transition hover:-translate-y-0.5 hover:shadow-[0_28px_55px_-22px_rgba(37,99,235,0.85)] disabled:cursor-not-allowed disabled:opacity-80"
+          className="button-success w-full py-[1.125rem] disabled:opacity-80"
         >
           {loading ? "Criando cadastro..." : "Criar meu acesso"}
         </button>
@@ -437,3 +437,4 @@ export default function CadastroPage() {
     </AuthShell>
   );
 }
+

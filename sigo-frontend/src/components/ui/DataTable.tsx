@@ -29,7 +29,7 @@ export function DataTable<T>({
   }
 
   return (
-    <div className="overflow-x-auto overflow-y-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div className="overflow-x-auto overflow-y-hidden rounded-[18px] border border-slate-200/80 bg-white shadow-[0_16px_36px_-30px_rgba(15,23,42,0.35)]">
       <table className="data-table">
         <thead>
           <tr>
@@ -47,7 +47,10 @@ export function DataTable<T>({
         <tbody>
           {data.length === 0 ? (
             <tr>
-              <td className="px-4 py-6 text-center text-sm text-slate-400" colSpan={columns.length}>
+              <td
+                className="px-4 py-10 text-center text-sm text-slate-400"
+                colSpan={columns.length}
+              >
                 {emptyMessage}
               </td>
             </tr>

@@ -53,8 +53,7 @@ export function ServicosSection() {
       const data = await listServicos();
       setServicos(data);
     } catch {
-      //console.error(error);
-      setFeedback("Não foi possível carregar os serviços.");
+      setFeedback("Nao foi possivel carregar os servicos.");
     } finally {
       setLoading(false);
     }
@@ -98,32 +97,31 @@ export function ServicosSection() {
     try {
       if (editingId) {
         await updateServico(editingId, payload);
-        setFeedback("Serviço atualizado com sucesso.");
+        setFeedback("Servico atualizado com sucesso.");
       } else {
         await createServico(payload);
-        setFeedback("Serviço cadastrado com sucesso.");
+        setFeedback("Servico cadastrado com sucesso.");
       }
       await refresh();
       resetForm();
     } catch {
-      //console.error(error);
-      setFeedback("Não foi possível salvar o serviço.");
+      setFeedback("Nao foi possivel salvar o servico.");
     } finally {
       setSubmitting(false);
     }
   }
 
   async function handleDelete(servico: Servico) {
-    if (!window.confirm(`Remover o serviço ${servico.Nome}?`)) {
+    if (!window.confirm(`Remover o servico ${servico.Nome}?`)) {
       return;
     }
+
     try {
       await deleteServico(servico.Id);
-      setFeedback("Serviço removido com sucesso.");
+      setFeedback("Servico removido com sucesso.");
       await refresh();
     } catch {
-      //console.error(error);
-      setFeedback("Não foi possível remover o serviço.");
+      setFeedback("Nao foi possivel remover o servico.");
     }
   }
 
@@ -131,6 +129,7 @@ export function ServicosSection() {
     if (!search.trim()) {
       return servicos;
     }
+
     const term = search.toLowerCase();
     return servicos.filter((item) =>
       [item.Nome, item.Descricao]
@@ -142,40 +141,32 @@ export function ServicosSection() {
   return (
     <div className="space-y-6">
       <SectionHeader
-        title="Serviços"
-        description="Mantenha o catálogo de serviços e valores atualizados."
+        title="Servicos"
+        description="Mantenha o catalogo de servicos e valores atualizados."
         actionSlot={
           <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={openModalForCreate}
-              className="rounded-lg bg-emerald-500 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-600"
-            >
-              Novo serviço
+            <button type="button" onClick={openModalForCreate} className="button-primary">
+              Novo servico
             </button>
             <input
               type="search"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder="Buscar serviço"
-              className="w-64 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+              placeholder="Buscar servico"
+              className="toolbar-search w-64"
             />
           </div>
         }
       />
 
-      {feedback && (
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-          {feedback}
-        </div>
-      )}
+      {feedback && <div className="feedback-success">{feedback}</div>}
 
       <div className="grid gap-6">
         <DataTable
           data={filtered}
           columns={[
-            { header: "Serviço", key: "Nome" },
-            { header: "Descrição", key: "Descricao" },
+            { header: "Servico", key: "Nome" },
+            { header: "Descricao", key: "Descricao" },
             {
               header: "Valor",
               key: "Valor",
@@ -183,27 +174,28 @@ export function ServicosSection() {
               render: (item) => formatCurrency(item.Valor ?? 0),
             },
             {
-              header: "Garantia até",
+              header: "Garantia ate",
               key: "Garantia",
               width: "140px",
-              render: (item) => (item.Garantia ? new Date(item.Garantia).toLocaleDateString("pt-BR") : "-"),
+              render: (item) =>
+                item.Garantia ? new Date(item.Garantia).toLocaleDateString("pt-BR") : "-",
             },
             {
-              header: "Ações",
+              header: "Acoes",
               key: "Id",
               render: (item) => (
                 <div className="flex gap-2 text-xs">
                   <button
                     type="button"
                     onClick={() => populateForm(item)}
-                    className="rounded-lg border border-emerald-200 px-3 py-1 font-medium text-emerald-600 hover:bg-emerald-50"
+                    className="button-inline"
                   >
                     Editar
                   </button>
                   <button
                     type="button"
                     onClick={() => handleDelete(item)}
-                    className="rounded-lg border border-rose-200 px-3 py-1 font-medium text-rose-600 hover:bg-rose-50"
+                    className="button-inline-danger"
                   >
                     Remover
                   </button>
@@ -211,69 +203,96 @@ export function ServicosSection() {
               ),
             },
           ]}
-          emptyMessage={
-            loading ? "Carregando serviços..." : "Nenhum serviço cadastrado"
-          }
+          emptyMessage={loading ? "Carregando servicos..." : "Nenhum servico cadastrado"}
           getRowId={(item) => item.Id}
         />
       </div>
+
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setShowModal(false)} />
-          <div className="relative z-10 w-full max-w-lg rounded-xl bg-white shadow-lg flex flex-col max-h-[90vh]">
-            <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4 flex-shrink-0">
+        <div className="modal-overlay">
+          <div className="modal-scrim" onClick={() => setShowModal(false)} />
+          <div className="modal-card max-w-lg">
+            <div className="modal-header">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">{editingId ? 'Editar' : 'Novo'} Serviço</p>
-                <h3 className="mt-2 text-lg font-semibold text-slate-900">{editingId ? 'Atualize os valores' : 'Defina os detalhes'}</h3>
+                <p className="modal-eyebrow">{editingId ? "Editar" : "Novo"} servico</p>
+                <h3 className="modal-title">
+                  {editingId ? "Atualize os valores" : "Defina os detalhes"}
+                </h3>
               </div>
-              <button type="button" onClick={() => setShowModal(false)} className="text-slate-500 hover:text-slate-700">Fechar</button>
+              <button
+                type="button"
+                onClick={() => setShowModal(false)}
+                className="button-ghost"
+              >
+                Fechar
+              </button>
             </div>
-            <form className="mt-0 space-y-4 px-6 py-4 overflow-y-auto" id="servico-form" onSubmit={handleSubmit}>
+            <form className="modal-body" id="servico-form" onSubmit={handleSubmit}>
               <div>
-                <label className="block text-xs font-semibold text-slate-400">Nome do serviço</label>
+                <label className="field-label">Nome do servico</label>
                 <input
                   required
                   value={form.Nome}
                   onChange={(event) => setForm((prev) => ({ ...prev, Nome: event.target.value }))}
-                  className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                  className="field-input mt-2"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400">Descrição</label>
+                <label className="field-label">Descricao</label>
                 <textarea
                   required
                   rows={3}
                   value={form.Descricao}
-                  onChange={(event) => setForm((prev) => ({ ...prev, Descricao: event.target.value }))}
-                  className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                  onChange={(event) =>
+                    setForm((prev) => ({ ...prev, Descricao: event.target.value }))
+                  }
+                  className="field-textarea mt-2"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Valor</label>
+                  <label className="field-label">Valor</label>
                   <input
                     required
                     type="number"
                     step="0.01"
                     value={form.Valor}
-                    onChange={(event) => setForm((prev) => ({ ...prev, Valor: event.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    onChange={(event) =>
+                      setForm((prev) => ({ ...prev, Valor: event.target.value }))
+                    }
+                    className="field-input mt-2"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Garantia até</label>
+                  <label className="field-label">Garantia ate</label>
                   <input
+                    required
                     type="date"
                     value={form.Garantia}
-                    onChange={(event) => setForm((prev) => ({ ...prev, Garantia: event.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    onChange={(event) =>
+                      setForm((prev) => ({ ...prev, Garantia: event.target.value }))
+                    }
+                    className="field-input mt-2"
                   />
                 </div>
               </div>
             </form>
-            <div className="flex items-center gap-3 justify-end border-t border-slate-200 px-6 py-4 flex-shrink-0">
-              <button type="button" onClick={() => setShowModal(false)} className="rounded-xl border border-slate-200 px-4 py-2 text-sm">Cancelar</button>
-              <button type="submit" form="servico-form" disabled={submitting} className="rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600 disabled:opacity-60">{submitting ? 'Salvando...' : editingId ? 'Atualizar' : 'Cadastrar'}</button>
+            <div className="modal-footer">
+              <button
+                type="button"
+                onClick={() => setShowModal(false)}
+                className="button-cancel"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                form="servico-form"
+                disabled={submitting}
+                className="button-success disabled:opacity-60"
+              >
+                {submitting ? "Salvando..." : editingId ? "Atualizar" : "Cadastrar"}
+              </button>
             </div>
           </div>
         </div>

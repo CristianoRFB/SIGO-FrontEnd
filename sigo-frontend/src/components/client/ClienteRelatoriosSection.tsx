@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { StatCard } from "@/components/ui/StatCard";
 import { downloadVehicleReport } from "@/services/relatorios";
 import { getErrorMessage } from "@/services/errors";
 import { listVeiculos } from "@/services/veiculos";
@@ -62,6 +63,24 @@ export function ClienteRelatoriosSection() {
 
   return (
     <div className="space-y-6">
+      <section className="grid gap-4 md:grid-cols-3">
+        <StatCard
+          title="Veiculos aptos"
+          value={loading ? "--" : String(veiculos.length)}
+          helper="Itens com relatorio disponivel"
+        />
+        <StatCard
+          title="Downloads em fila"
+          value={downloadingId ? "1" : "0"}
+          helper="Solicitacoes iniciadas nesta sessao"
+        />
+        <StatCard
+          title="Portal de historico"
+          value="PDF"
+          helper="Arquivo gerado diretamente pela API"
+        />
+      </section>
+
       <section className="app-card space-y-4">
         <SectionHeader
           title="Relatorios"
@@ -69,23 +88,23 @@ export function ClienteRelatoriosSection() {
         />
 
         {feedback && (
-          <div className="rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-700">
+          <div className="feedback-info">
             {feedback}
           </div>
         )}
 
         {error && (
-          <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-600">
+          <div className="feedback-danger">
             {error}
           </div>
         )}
 
         {loading ? (
-          <div className="rounded-2xl border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-700">
+          <div className="feedback-info">
             Carregando veiculos para emissao dos relatorios...
           </div>
         ) : veiculos.length === 0 ? (
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-500">
+          <div className="surface-muted text-sm text-slate-500">
             Nenhum veiculo encontrado para gerar relatorio.
           </div>
         ) : (
@@ -96,7 +115,7 @@ export function ClienteRelatoriosSection() {
               return (
                 <article
                   key={veiculo.Id}
-                  className="rounded-[28px] border border-blue-100 bg-white p-5 shadow-[0_18px_45px_-34px_rgba(37,99,235,0.24)]"
+                  className="app-subcard"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
@@ -126,7 +145,7 @@ export function ClienteRelatoriosSection() {
                     type="button"
                     onClick={() => handleDownload(veiculo.Id)}
                     disabled={downloadingId === veiculo.Id}
-                    className="mt-5 w-full rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
+                    className="button-success mt-5 w-full disabled:opacity-70"
                   >
                     {downloadingId === veiculo.Id
                       ? "Baixando relatorio..."
@@ -141,3 +160,4 @@ export function ClienteRelatoriosSection() {
     </div>
   );
 }
+

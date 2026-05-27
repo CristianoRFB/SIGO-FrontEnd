@@ -2,6 +2,7 @@
 
 import { ReactNode, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { SigoBrand } from "@/components/branding/SigoBrand";
 import type { UserRole } from "@/types/entities";
 import { clearToken, getUserFromToken } from "@/services/auth";
 
@@ -61,10 +62,17 @@ export function SessionGuard({
   if (!access.allowed) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#f4f8ff] px-4">
-        <div className="w-full max-w-md rounded-[28px] border border-blue-100 bg-white p-8 text-center shadow-[0_28px_70px_-38px_rgba(37,99,235,0.38)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-blue-600">
-            SIGO
-          </p>
+        <div className="app-panel w-full max-w-md border-blue-100 p-8 text-center">
+          <div className="flex justify-center">
+            <SigoBrand
+              size={56}
+              subtitle="Validacao de sessao"
+              containerClassName="flex items-center gap-4 text-left"
+              imageWrapperClassName="overflow-hidden rounded-[14px] border border-blue-100 bg-white shadow-[0_18px_34px_-22px_rgba(37,99,235,0.35)]"
+              titleClassName="text-xs font-semibold uppercase tracking-[0.32em] text-blue-600"
+              subtitleClassName="mt-1 text-sm text-slate-500"
+            />
+          </div>
           <h1 className="mt-4 text-2xl font-semibold text-slate-900">
             Validando seu acesso
           </h1>

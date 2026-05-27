@@ -12,12 +12,37 @@ import {
   loginOficina,
   setToken,
 } from "@/services/auth";
-import { getErrorMessage } from "@/services/errors";
+import { ApiError, getErrorMessage } from "@/services/errors";
+
+type LoginAccess = "cliente" | "oficina" | "equipe";
+
+const ACCESS_OPTIONS: Array<{
+  value: LoginAccess;
+  label: string;
+  description: string;
+}> = [
+  {
+    value: "cliente",
+    label: "Cliente",
+    description: "Acompanhe veiculos, pedidos e relatorios.",
+  },
+  {
+    value: "oficina",
+    label: "Oficina",
+    description: "Entre como responsavel pela operacao da oficina.",
+  },
+  {
+    value: "equipe",
+    label: "Equipe/Admin",
+    description: "Acesso para funcionarios e administradores.",
+  },
+];
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [access, setAccess] = useState<LoginAccess>("cliente");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -46,28 +71,12 @@ export default function LoginPage() {
     try {
       setLoading(true);
 
-      const loginAttempts = [loginCliente, loginFuncionario, loginOficina];
-      let token: string | null = null;
-      let lastError: unknown = null;
-
-      for (const login of loginAttempts) {
-        try {
-          token = await login(email, password);
-          break;
-        } catch (attemptError) {
-          lastError = attemptError;
-
-          if (isInvalidCredentialsError(attemptError)) {
-            continue;
-          }
-
-          throw attemptError;
-        }
-      }
-
-      if (!token) {
-        throw lastError ?? new Error("E-mail ou senha invalidos.");
-      }
+      const token =
+        access === "cliente"
+          ? await loginCliente(email, password)
+          : access === "oficina"
+            ? await loginOficina(email, password)
+            : await loginFuncionario(email, password);
 
       setToken(token);
 
@@ -85,6 +94,16 @@ export default function LoginPage() {
 
       throw new Error("Nao foi possivel identificar o perfil do usuario.");
     } catch (currentError) {
+      if (currentError instanceof ApiError && currentError.status === 429) {
+        setError("Muitas tentativas de login. Aguarde 1 minuto e tente novamente.");
+        return;
+      }
+
+      if (isInvalidCredentialsError(currentError)) {
+        setError("E-mail ou senha incorretos para o perfil selecionado.");
+        return;
+      }
+
       setError(
         getErrorMessage(
           currentError,
@@ -116,7 +135,46 @@ export default function LoginPage() {
         </div>
       }
     >
-      <form className="mt-10 space-y-6" onSubmit={handleSubmit}>
+      <form className="mt-10 space-y-6 rounded-[18px] border border-slate-200/80 bg-white/90 p-6 shadow-[0_18px_42px_-34px_rgba(15,23,42,0.25)]" onSubmit={handleSubmit}>
+        <div className="space-y-3">
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-sm font-semibold text-slate-800">Tipo de acesso</p>
+            <span className="text-xs font-medium uppercase tracking-[0.22em] text-slate-400">
+              escolha antes de entrar
+            </span>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-3">
+            {ACCESS_OPTIONS.map((option) => {
+              const isActive = access === option.value;
+
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => setAccess(option.value)}
+                  className={[
+                    "rounded-[14px] border px-4 py-4 text-left transition",
+                    isActive
+                      ? "border-blue-500 bg-blue-600 text-white shadow-[0_18px_30px_-22px_rgba(37,99,235,0.9)]"
+                      : "border-slate-200 bg-slate-50/80 text-slate-700 hover:border-blue-200 hover:bg-blue-50/70",
+                  ].join(" ")}
+                >
+                  <p className="text-sm font-semibold">{option.label}</p>
+                  <p
+                    className={[
+                      "mt-2 text-xs leading-5",
+                      isActive ? "text-blue-50/88" : "text-slate-500",
+                    ].join(" ")}
+                  >
+                    {option.description}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         <div className="grid gap-5">
           <label className="space-y-2 text-sm font-medium text-slate-700" htmlFor="email">
             <span>E-mail</span>
@@ -126,7 +184,7 @@ export default function LoginPage() {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               placeholder="seuemail@empresa.com"
-              className="w-full rounded-2xl border border-blue-100 bg-blue-50/40 px-4 py-3.5 text-sm text-slate-900 shadow-[0_12px_30px_-24px_rgba(37,99,235,0.35)] transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100"
+              className="field-input"
               autoComplete="email"
             />
           </label>
@@ -139,7 +197,7 @@ export default function LoginPage() {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               placeholder="Digite sua senha"
-              className="w-full rounded-2xl border border-blue-100 bg-blue-50/40 px-4 py-3.5 text-sm text-slate-900 shadow-[0_12px_30px_-24px_rgba(37,99,235,0.35)] transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100"
+              className="field-input"
               autoComplete="current-password"
             />
           </label>
@@ -147,14 +205,14 @@ export default function LoginPage() {
 
         {error && (
           <p
-            className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600"
+            className="feedback-danger"
             aria-live="polite"
           >
             {error}
           </p>
         )}
 
-        <div className="flex flex-col gap-3 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-4 rounded-[14px] border border-slate-200 bg-slate-50/80 px-4 py-4 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
           <label className="flex items-center gap-3">
             <input
               type="checkbox"
@@ -162,13 +220,15 @@ export default function LoginPage() {
             />
             Manter sessao ativa neste dispositivo
           </label>
-          <span className="font-medium text-blue-600">Ambiente monitorado</span>
+          <span className="font-medium text-blue-600">
+            Perfil atual: {ACCESS_OPTIONS.find((option) => option.value === access)?.label}
+          </span>
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="flex w-full items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#1d4ed8,#2563eb,#60a5fa)] px-4 py-4 text-sm font-semibold text-white shadow-[0_24px_50px_-22px_rgba(37,99,235,0.8)] transition hover:-translate-y-0.5 hover:shadow-[0_28px_55px_-22px_rgba(37,99,235,0.85)] disabled:cursor-not-allowed disabled:opacity-80"
+          className="button-success w-full py-3.5 disabled:opacity-80"
         >
           {loading ? "Entrando..." : "Entrar no SIGO"}
         </button>

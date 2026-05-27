@@ -40,115 +40,91 @@ export default function NovoClientePage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6 lg:p-12">
-      <div className="mx-auto max-w-3xl">
-        <div className="mb-6 flex items-center justify-between">
+    <div className="min-h-screen px-4 py-6 lg:px-8 lg:py-8">
+      <div className="mx-auto max-w-4xl">
+        <div className="app-panel mb-6 flex flex-col gap-4 px-6 py-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-600">
-              Novo Cliente
+            <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-blue-600">
+              Painel / Clientes
             </p>
-            <h1 className="mt-2 text-2xl font-bold text-slate-900">
+            <h1 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950">
               Cadastrar cliente
             </h1>
-            <p className="mt-1 text-sm text-slate-500">
-              Preencha as informações abaixo para cadastrar um novo cliente.
+            <p className="mt-2 text-sm leading-6 text-slate-500">
+              Use este cadastro rapido para incluir um cliente diretamente no ambiente administrativo.
             </p>
           </div>
-          <div>
-            <Link
-              href="/clientes"
-              className="text-sm text-slate-600 hover:underline"
-            >
-              Voltar para clientes
-            </Link>
-          </div>
+          <Link href="/clientes" className="button-secondary">
+            Voltar para clientes
+          </Link>
         </div>
 
-        {feedback && (
-          <div className="mb-4 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-700">
-            {feedback}
-          </div>
-        )}
+        {feedback && <div className="feedback-info mb-4">{feedback}</div>}
 
-        <form onSubmit={handleSubmit} className="space-y-4 rounded-xl bg-white p-6 shadow">
-          <div>
-            <label className="block text-xs font-semibold text-slate-400">
-              Nome completo
-            </label>
-            <input
-              required
-              value={form.Nome}
-              onChange={(e) => setForm((p) => ({ ...p, Nome: e.target.value }))}
-              className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
-            />
-          </div>
+        <form onSubmit={handleSubmit} className="app-card space-y-5">
+          <div className="grid gap-5 md:grid-cols-2">
+            <div>
+              <label className="field-label">Nome completo</label>
+              <input
+                required
+                value={form.Nome}
+                onChange={(e) => setForm((current) => ({ ...current, Nome: e.target.value }))}
+                className="field-input mt-2"
+              />
+            </div>
 
-          <div>
-            <label className="block text-xs font-semibold text-slate-400">
-              E-mail
-            </label>
-            <input
-              required
-              type="email"
-              value={form.Email}
-              onChange={(e) => setForm((p) => ({ ...p, Email: e.target.value }))}
-              className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
-            />
-          </div>
+            <div>
+              <label className="field-label">E-mail</label>
+              <input
+                required
+                type="email"
+                value={form.Email}
+                onChange={(e) => setForm((current) => ({ ...current, Email: e.target.value }))}
+                className="field-input mt-2"
+              />
+            </div>
 
-          <div>
-            <label className="block text-xs font-semibold text-slate-400">
-              Senha de acesso
-            </label>
-            <input
-              required
-              type="password"
-              value={form.senha}
-              onChange={(e) => setForm((p) => ({ ...p, senha: e.target.value }))}
-              className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
-            />
-          </div>
+            <div>
+              <label className="field-label">Senha de acesso</label>
+              <input
+                required
+                type="password"
+                value={form.senha}
+                onChange={(e) => setForm((current) => ({ ...current, senha: e.target.value }))}
+                className="field-input mt-2"
+              />
+            </div>
 
-          <div>
-            <label className="block text-xs font-semibold text-slate-400">
-              CPF / CNPJ
-            </label>
-            <input
-              required
-              value={form.Cpf_Cnpj}
-              onChange={(e) =>
-                setForm((p) => ({ ...p, Cpf_Cnpj: e.target.value }))
-              }
-              className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
-            />
+            <div>
+              <label className="field-label">CPF / CNPJ</label>
+              <input
+                required
+                value={form.Cpf_Cnpj}
+                onChange={(e) =>
+                  setForm((current) => ({ ...current, Cpf_Cnpj: e.target.value }))
+                }
+                className="field-input mt-2"
+              />
+            </div>
           </div>
 
-          <div>
-            <label className="block text-xs font-semibold text-slate-400">
-              Data de nascimento
-            </label>
+          <div className="max-w-xs">
+            <label className="field-label">Data de nascimento</label>
             <input
               type="date"
               value={form.DataNasc}
               onChange={(e) =>
-                setForm((p) => ({ ...p, DataNasc: e.target.value }))
+                setForm((current) => ({ ...current, DataNasc: e.target.value }))
               }
-              className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+              className="field-input mt-2"
             />
           </div>
 
-          <div className="flex items-center gap-3">
-            <button
-              type="submit"
-              disabled={loading}
-              className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
-            >
+          <div className="flex flex-wrap items-center gap-3 border-t border-slate-200 pt-5">
+            <button type="submit" disabled={loading} className="button-success disabled:opacity-60">
               {loading ? "Cadastrando..." : "Cadastrar cliente"}
             </button>
-            <Link
-              href="/clientes"
-              className="rounded-xl border border-slate-200 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50"
-            >
+            <Link href="/clientes" className="button-cancel">
               Cancelar
             </Link>
           </div>

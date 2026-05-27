@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { DataTable } from "@/components/ui/DataTable";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { StatCard } from "@/components/ui/StatCard";
 import { getErrorMessage } from "@/services/errors";
 import { getPedido, listPedidos, listMyPedidoServices } from "@/services/pedidos";
 import { listVeiculos } from "@/services/veiculos";
@@ -107,6 +108,22 @@ export function ClientePedidosSection() {
     });
   }, [pedidosOrdenados, search, veiculosById]);
 
+  const pedidosFinalizados = useMemo(
+    () =>
+      pedidosOrdenados.filter((pedido) => {
+        const veiculo = veiculosById.get(pedido.idVeiculo);
+        return resolvePedidoStatusValue(pedido, veiculo) === 3;
+      }).length,
+    [pedidosOrdenados, veiculosById]
+  );
+
+  const pedidosEmAndamento = Math.max(pedidosOrdenados.length - pedidosFinalizados, 0);
+
+  const totalInvestido = useMemo(
+    () => pedidosOrdenados.reduce((accumulator, pedido) => accumulator + pedido.ValorTotal, 0),
+    [pedidosOrdenados]
+  );
+
   async function handleOpenDetails(pedidoId: number) {
     try {
       setDetailLoading(true);
@@ -129,6 +146,24 @@ export function ClientePedidosSection() {
 
   return (
     <div className="space-y-6">
+      <section className="grid gap-4 md:grid-cols-3">
+        <StatCard
+          title="Pedidos cadastrados"
+          value={loading ? "--" : String(pedidosOrdenados.length)}
+          helper="Historico vinculado ao seu login"
+        />
+        <StatCard
+          title="Em andamento"
+          value={loading ? "--" : String(pedidosEmAndamento)}
+          helper="Atendimentos com acompanhamento ativo"
+        />
+        <StatCard
+          title="Valor total"
+          value={loading ? "--" : formatCurrency(totalInvestido)}
+          helper="Soma dos pedidos retornados pela API"
+        />
+      </section>
+
       <section className="app-card space-y-4">
         <SectionHeader
           title="Meus pedidos"
@@ -139,16 +174,12 @@ export function ClientePedidosSection() {
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Buscar por pedido, observacao ou placa"
-              className="w-full rounded-2xl border border-blue-100 bg-blue-50/40 px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100 sm:w-80"
+              className="toolbar-search sm:w-80"
             />
           }
         />
 
-        {error && (
-          <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-600">
-            {error}
-          </div>
-        )}
+        {error && <div className="feedback-danger">{error}</div>}
 
         <DataTable
           data={filteredPedidos}
@@ -204,7 +235,7 @@ export function ClientePedidosSection() {
                 <button
                   type="button"
                   onClick={() => handleOpenDetails(pedido.Id)}
-                  className="rounded-xl border border-blue-200 px-3 py-1.5 text-xs font-semibold text-blue-700 transition hover:bg-blue-50"
+                  className="button-inline"
                 >
                   Detalhes
                 </button>
@@ -217,18 +248,13 @@ export function ClientePedidosSection() {
       </section>
 
       {selectedPedido && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 bg-slate-950/45"
-            onClick={() => setSelectedPedido(null)}
-          />
-          <div className="relative z-10 max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-[30px] bg-white p-6 shadow-[0_32px_80px_-32px_rgba(15,23,42,0.45)]">
+        <div className="modal-overlay">
+          <div className="modal-scrim" onClick={() => setSelectedPedido(null)} />
+          <div className="modal-card max-w-3xl overflow-y-auto p-6">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-600">
-                  Pedido #{selectedPedido.Id}
-                </p>
-                <h3 className="mt-2 text-2xl font-semibold text-slate-900">
+                <p className="modal-eyebrow">Pedido #{selectedPedido.Id}</p>
+                <h3 className="modal-title">
                   {getVehicleLabel(veiculosById.get(selectedPedido.idVeiculo))}
                 </h3>
                 <p className="mt-2 text-sm text-slate-500">
@@ -239,20 +265,18 @@ export function ClientePedidosSection() {
               <button
                 type="button"
                 onClick={() => setSelectedPedido(null)}
-                className="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-50"
+                className="button-secondary"
               >
                 Fechar
               </button>
             </div>
 
             {detailLoading ? (
-              <div className="mt-6 rounded-2xl border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-700">
-                Atualizando detalhes do pedido...
-              </div>
+              <div className="feedback-info mt-6">Atualizando detalhes do pedido...</div>
             ) : null}
 
             <div className="mt-6 grid gap-4 md:grid-cols-2">
-              <div className="rounded-2xl border border-blue-100 bg-blue-50/50 p-4">
+              <div className="surface-highlight">
                 <p className="text-xs font-semibold uppercase tracking-[0.26em] text-blue-600">
                   Resumo
                 </p>
@@ -281,7 +305,7 @@ export function ClientePedidosSection() {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-blue-100 bg-white p-4">
+              <div className="app-subcard">
                 <p className="text-xs font-semibold uppercase tracking-[0.26em] text-blue-600">
                   Observacao
                 </p>
@@ -292,7 +316,7 @@ export function ClientePedidosSection() {
             </div>
 
             <div className="mt-6 space-y-4">
-              <div className="rounded-2xl border border-slate-200 p-4">
+              <div className="app-subcard">
                 <p className="text-xs font-semibold uppercase tracking-[0.26em] text-blue-600">
                   Servicos vinculados
                 </p>
@@ -303,20 +327,19 @@ export function ClientePedidosSection() {
                     {selectedPedido.Pedido_Servicos.map((servico) => (
                       <li
                         key={`${servico.IdPedido}-${servico.IdServico}`}
-                        className="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600"
+                        className="rounded-[12px] border border-slate-200 bg-slate-50/90 px-4 py-3 text-sm text-slate-600"
                       >
                         <span className="font-semibold text-slate-900">
                           {renderServicoLabel(servico)}
                         </span>
-                        {" • "}
-                        Quantidade: {servico.QuantVezes}
+                        {" - "}Quantidade: {servico.QuantVezes}
                       </li>
                     ))}
                   </ul>
                 )}
               </div>
 
-              <div className="rounded-2xl border border-slate-200 p-4">
+              <div className="app-subcard">
                 <p className="text-xs font-semibold uppercase tracking-[0.26em] text-blue-600">
                   Pecas vinculadas
                 </p>
@@ -327,15 +350,14 @@ export function ClientePedidosSection() {
                     {selectedPedido.Pedido_Pecas.map((peca) => (
                       <li
                         key={`${peca.IdPedido}-${peca.IdPeca}`}
-                        className="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600"
+                        className="rounded-[12px] border border-slate-200 bg-slate-50/90 px-4 py-3 text-sm text-slate-600"
                       >
                         <span className="font-semibold text-slate-900">
                           {renderPecaLabel(peca)}
                         </span>
-                        {" • "}
-                        Quantidade: {peca.Quantidade}
-                        {peca.Estado ? ` • Estado: ${peca.Estado}` : ""}
-                        {peca.Observacao ? ` • ${peca.Observacao}` : ""}
+                        {" - "}Quantidade: {peca.Quantidade}
+                        {peca.Estado ? ` - Estado: ${peca.Estado}` : ""}
+                        {peca.Observacao ? ` - ${peca.Observacao}` : ""}
                       </li>
                     ))}
                   </ul>

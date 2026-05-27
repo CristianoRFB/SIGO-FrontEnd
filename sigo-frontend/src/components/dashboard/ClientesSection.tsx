@@ -208,7 +208,7 @@ export function ClientesSection() {
             <button
               type="button"
               onClick={openCreateModal}
-              className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+              className="button-primary"
             >
               Novo cliente
             </button>
@@ -217,14 +217,14 @@ export function ClientesSection() {
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Buscar por nome, CPF ou cidade"
-              className="w-64 rounded-xl border border-blue-200 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              className="toolbar-search w-64"
             />
           </div>
         }
       />
 
       {feedback && (
-        <div className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-700">
+        <div className="feedback-info">
           {feedback}
         </div>
       )}
@@ -253,14 +253,14 @@ export function ClientesSection() {
                 <button
                   type="button"
                   onClick={() => openEditModal(item.Id)}
-                  className="rounded-lg border border-blue-200 px-3 py-1 font-medium text-blue-600 hover:bg-blue-50"
+                  className="button-inline"
                 >
                   Editar
                 </button>
                 <button
                   type="button"
                   onClick={() => handleDelete(item)}
-                  className="rounded-lg border border-rose-200 px-3 py-1 font-medium text-rose-600 hover:bg-rose-50"
+                  className="button-inline-danger"
                 >
                   Remover
                 </button>
@@ -273,10 +273,10 @@ export function ClientesSection() {
       />
 
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setShowModal(false)} />
-          <div className="relative z-10 flex max-h-[90vh] w-full max-w-lg flex-col rounded-xl bg-white shadow-lg">
-            <div className="flex shrink-0 items-center justify-between border-b border-slate-200 px-6 py-4">
+        <div className="modal-overlay">
+          <div className="modal-scrim" onClick={() => setShowModal(false)} />
+          <div className="modal-card max-w-lg">
+            <div className="modal-header">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-600">
                   {modalEditingId ? "Editar" : "Novo"} Cliente
@@ -288,7 +288,7 @@ export function ClientesSection() {
               <button
                 type="button"
                 onClick={() => setShowModal(false)}
-                className="text-slate-500 hover:text-slate-700"
+                className="button-ghost"
               >
                 Fechar
               </button>
@@ -296,58 +296,58 @@ export function ClientesSection() {
 
             <form
               id="cliente-form"
-              className="mt-0 space-y-4 overflow-y-auto px-6 py-4"
+              className="modal-body"
               onSubmit={handleModalSubmit}
             >
               <div>
-                <label className="block text-xs font-semibold text-slate-400">Nome completo</label>
+                <label className="field-label">Nome completo</label>
                 <input
                   required
                   value={modalForm.Nome}
                   onChange={(e) => setModalForm((prev) => ({ ...prev, Nome: e.target.value }))}
-                  className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                  className="field-input mt-2"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-400">E-mail</label>
+                <label className="field-label">E-mail</label>
                 <input
                   required
                   type="email"
                   value={modalForm.Email}
                   onChange={(e) => setModalForm((prev) => ({ ...prev, Email: e.target.value }))}
-                  className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                  className="field-input mt-2"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">CPF / CNPJ</label>
+                  <label className="field-label">CPF / CNPJ</label>
                   <input
                     required
                     value={modalForm.Cpf_Cnpj}
                     onChange={(e) => setModalForm((prev) => ({ ...prev, Cpf_Cnpj: e.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    className="field-input mt-2"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Data de nascimento</label>
+                  <label className="field-label">Data de nascimento</label>
                   <input
                     type="date"
                     value={modalForm.DataNasc}
                     onChange={(e) => setModalForm((prev) => ({ ...prev, DataNasc: e.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    className="field-input mt-2"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Tipo de cliente</label>
+                  <label className="field-label">Tipo de cliente</label>
                   <select
                     value={modalForm.TipoCliente}
                     onChange={(e) => setModalForm((prev) => ({ ...prev, TipoCliente: Number(e.target.value) }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm"
+                    className="field-select mt-2"
                   >
                     {tipoClienteOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -357,11 +357,11 @@ export function ClientesSection() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Sexo</label>
+                  <label className="field-label">Sexo</label>
                   <select
                     value={modalForm.Sexo}
                     onChange={(e) => setModalForm((prev) => ({ ...prev, Sexo: Number(e.target.value) }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm"
+                    className="field-select mt-2"
                   >
                     {sexoOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -371,11 +371,11 @@ export function ClientesSection() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Situacao</label>
+                  <label className="field-label">Situacao</label>
                   <select
                     value={modalForm.Situacao}
                     onChange={(e) => setModalForm((prev) => ({ ...prev, Situacao: Number(e.target.value) }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm"
+                    className="field-select mt-2"
                   >
                     {situacaoOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -388,115 +388,115 @@ export function ClientesSection() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Cidade</label>
+                  <label className="field-label">Cidade</label>
                   <input
                     value={modalForm.Cidade}
                     onChange={(e) => setModalForm((prev) => ({ ...prev, Cidade: e.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    className="field-input mt-2"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Estado</label>
+                  <label className="field-label">Estado</label>
                   <input
                     value={modalForm.Estado}
                     onChange={(e) => setModalForm((prev) => ({ ...prev, Estado: e.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    className="field-input mt-2"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-400">Senha</label>
+                <label className="field-label">Senha</label>
                 <input
                   type="password"
                   value={modalForm.senha}
                   onChange={(e) => setModalForm((prev) => ({ ...prev, senha: e.target.value }))}
-                  className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                  className="field-input mt-2"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-400">Rua</label>
+                <label className="field-label">Rua</label>
                 <input
                   value={modalForm.Rua}
                   onChange={(e) => setModalForm((prev) => ({ ...prev, Rua: e.target.value }))}
-                  className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                  className="field-input mt-2"
                 />
               </div>
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Numero</label>
+                  <label className="field-label">Numero</label>
                   <input
                     type="number"
                     value={modalForm.Numero}
                     onChange={(e) => setModalForm((prev) => ({ ...prev, Numero: Number(e.target.value) }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    className="field-input mt-2"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Bairro</label>
+                  <label className="field-label">Bairro</label>
                   <input
                     value={modalForm.Bairro}
                     onChange={(e) => setModalForm((prev) => ({ ...prev, Bairro: e.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    className="field-input mt-2"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">CEP</label>
+                  <label className="field-label">CEP</label>
                   <input
                     type="text"
                     value={modalForm.Cep}
                     onChange={(e) => setModalForm((prev) => ({ ...prev, Cep: e.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    className="field-input mt-2"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Pais</label>
+                  <label className="field-label">Pais</label>
                   <input
                     value={modalForm.Pais}
                     onChange={(e) => setModalForm((prev) => ({ ...prev, Pais: e.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    className="field-input mt-2"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Complemento</label>
+                  <label className="field-label">Complemento</label>
                   <input
                     value={modalForm.Complemento}
                     onChange={(e) => setModalForm((prev) => ({ ...prev, Complemento: e.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    className="field-input mt-2"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Razao social / Apelido</label>
+                  <label className="field-label">Razao social / Apelido</label>
                   <input
                     value={modalForm.razao}
                     onChange={(e) => setModalForm((prev) => ({ ...prev, razao: e.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    className="field-input mt-2"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Observacoes</label>
+                  <label className="field-label">Observacoes</label>
                   <input
                     value={modalForm.Obs}
                     onChange={(e) => setModalForm((prev) => ({ ...prev, Obs: e.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    className="field-input mt-2"
                   />
                 </div>
               </div>
             </form>
 
-            <div className="flex shrink-0 items-center justify-end gap-3 border-t border-slate-200 px-6 py-4">
+            <div className="modal-footer">
               <button
                 type="button"
                 onClick={() => setShowModal(false)}
-                className="rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                className="button-cancel"
               >
                 Cancelar
               </button>
@@ -504,7 +504,7 @@ export function ClientesSection() {
                 type="submit"
                 form="cliente-form"
                 disabled={modalSubmitting}
-                className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
+                className="button-success disabled:opacity-60"
               >
                 {modalSubmitting ? "Salvando..." : modalEditingId ? "Atualizar" : "Cadastrar"}
               </button>
@@ -515,3 +515,5 @@ export function ClientesSection() {
     </div>
   );
 }
+
+

@@ -130,7 +130,7 @@ export function MarcasSection() {
             <button
               type="button"
               onClick={openModalForCreate}
-              className="rounded-lg bg-emerald-500 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-600"
+              className="button-primary"
             >
               Nova marca
             </button>
@@ -139,14 +139,14 @@ export function MarcasSection() {
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Buscar por nome ou tipo"
-              className="w-64 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+              className="toolbar-search w-64"
             />
           </div>
         }
       />
 
       {feedback && (
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+        <div className="feedback-success">
           {feedback}
         </div>
       )}
@@ -165,14 +165,14 @@ export function MarcasSection() {
                 <button
                   type="button"
                   onClick={() => populateForm(marca)}
-                  className="rounded-lg border border-emerald-200 px-3 py-1 font-medium text-emerald-600 hover:bg-emerald-50"
+                  className="button-inline"
                 >
                   Editar
                 </button>
                 <button
                   type="button"
                   onClick={() => handleDelete(marca)}
-                  className="rounded-lg border border-rose-200 px-3 py-1 font-medium text-rose-600 hover:bg-rose-50"
+                  className="button-inline-danger"
                 >
                   Remover
                 </button>
@@ -185,10 +185,10 @@ export function MarcasSection() {
       />
 
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setShowModal(false)} />
-          <div className="relative z-10 flex max-h-[90vh] w-full max-w-lg flex-col rounded-xl bg-white shadow-lg">
-            <div className="flex shrink-0 items-center justify-between border-b border-slate-200 px-6 py-4">
+        <div className="modal-overlay">
+          <div className="modal-scrim" onClick={() => setShowModal(false)} />
+          <div className="modal-card max-w-lg">
+            <div className="modal-header">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-600">
                   {editingId !== null ? "Editar" : "Nova"} Marca
@@ -197,43 +197,43 @@ export function MarcasSection() {
                   {editingId !== null ? "Atualize as informacoes" : "Preencha os dados"}
                 </h3>
               </div>
-              <button type="button" onClick={() => setShowModal(false)} className="text-slate-500 hover:text-slate-700">
+              <button type="button" onClick={() => setShowModal(false)} className="button-ghost">
                 Fechar
               </button>
             </div>
-            <form id="marca-form" className="mt-0 space-y-4 overflow-y-auto px-6 py-4" onSubmit={handleSubmit}>
+            <form id="marca-form" className="modal-body" onSubmit={handleSubmit}>
               <div>
-                <label className="block text-xs font-semibold text-slate-400">Nome da marca</label>
+                <label className="field-label">Nome da marca</label>
                 <input
                   required
                   value={form.Nome}
                   onChange={(event) => setForm((prev) => ({ ...prev, Nome: event.target.value }))}
-                  className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                  className="field-input mt-2"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400">Segmento ou linha</label>
+                <label className="field-label">Segmento ou linha</label>
                 <input
                   value={form.TipoMarca}
                   onChange={(event) => setForm((prev) => ({ ...prev, TipoMarca: event.target.value }))}
-                  className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                  className="field-input mt-2"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400">Descricao</label>
+                <label className="field-label">Descricao</label>
                 <textarea
                   rows={3}
                   value={form.Desc}
                   onChange={(event) => setForm((prev) => ({ ...prev, Desc: event.target.value }))}
-                  className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                  className="field-textarea mt-2"
                 />
               </div>
             </form>
-            <div className="flex shrink-0 items-center justify-end gap-3 border-t border-slate-200 px-6 py-4">
-              <button type="button" onClick={() => setShowModal(false)} className="rounded-xl border border-slate-200 px-4 py-2 text-sm">
+            <div className="modal-footer">
+              <button type="button" onClick={() => setShowModal(false)} className="button-cancel">
                 Cancelar
               </button>
-              <button type="submit" form="marca-form" disabled={submitting} className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60">
+              <button type="submit" form="marca-form" disabled={submitting} className="button-success disabled:opacity-60">
                 {submitting ? "Salvando..." : editingId !== null ? "Atualizar" : "Cadastrar"}
               </button>
             </div>
@@ -243,3 +243,4 @@ export function MarcasSection() {
     </div>
   );
 }
+

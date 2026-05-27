@@ -149,7 +149,7 @@ export function FuncionariosSection() {
             <button
               type="button"
               onClick={openModalForCreate}
-              className="rounded-lg bg-emerald-500 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-600"
+              className="button-primary"
             >
               Novo colaborador
             </button>
@@ -158,14 +158,14 @@ export function FuncionariosSection() {
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Buscar por nome ou cargo"
-              className="w-64 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+              className="toolbar-search w-64"
             />
           </div>
         }
       />
 
       {feedback && (
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+        <div className="feedback-success">
           {feedback}
         </div>
       )}
@@ -198,14 +198,14 @@ export function FuncionariosSection() {
                 <button
                   type="button"
                   onClick={() => populateForm(item)}
-                  className="rounded-lg border border-emerald-200 px-3 py-1 font-medium text-emerald-600 hover:bg-emerald-50"
+                  className="button-inline"
                 >
                   Editar
                 </button>
                 <button
                   type="button"
                   onClick={() => handleDelete(item)}
-                  className="rounded-lg border border-rose-200 px-3 py-1 font-medium text-rose-600 hover:bg-rose-50"
+                  className="button-inline-danger"
                 >
                   Remover
                 </button>
@@ -218,10 +218,10 @@ export function FuncionariosSection() {
       />
 
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setShowModal(false)} />
-          <div className="relative z-10 flex max-h-[90vh] w-full max-w-lg flex-col rounded-xl bg-white shadow-lg">
-            <div className="flex shrink-0 items-center justify-between border-b border-slate-200 px-6 py-4">
+        <div className="modal-overlay">
+          <div className="modal-scrim" onClick={() => setShowModal(false)} />
+          <div className="modal-card max-w-lg">
+            <div className="modal-header">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-600">
                   {editingId ? "Editar" : "Novo"} Colaborador
@@ -233,71 +233,71 @@ export function FuncionariosSection() {
               <button
                 type="button"
                 onClick={() => setShowModal(false)}
-                className="text-slate-500 hover:text-slate-700"
+                className="button-ghost"
               >
                 Fechar
               </button>
             </div>
             <form
               id="funcionario-form"
-              className="mt-0 space-y-4 overflow-y-auto px-6 py-4"
+              className="modal-body"
               onSubmit={handleSubmit}
             >
               <div>
-                <label className="block text-xs font-semibold text-slate-400">Nome completo</label>
+                <label className="field-label">Nome completo</label>
                 <input
                   required
                   value={form.Nome}
                   onChange={(event) => setForm((prev) => ({ ...prev, Nome: event.target.value }))}
-                  className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                  className="field-input mt-2"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">CPF</label>
+                  <label className="field-label">CPF</label>
                   <input
                     required
                     value={form.Cpf}
                     onChange={(event) => setForm((prev) => ({ ...prev, Cpf: event.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    className="field-input mt-2"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400">Cargo</label>
+                  <label className="field-label">Cargo</label>
                   <input
                     required
                     value={form.Cargo}
                     onChange={(event) => setForm((prev) => ({ ...prev, Cargo: event.target.value }))}
-                    className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                    className="field-input mt-2"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400">E-mail</label>
+                <label className="field-label">E-mail</label>
                 <input
                   required
                   type="email"
                   value={form.Email}
                   onChange={(event) => setForm((prev) => ({ ...prev, Email: event.target.value }))}
-                  className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                  className="field-input mt-2"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400">Senha</label>
+                <label className="field-label">Senha</label>
                 <input
                   required
                   type="password"
                   value={form.Senha}
                   onChange={(event) => setForm((prev) => ({ ...prev, Senha: event.target.value }))}
-                  className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                  className="field-input mt-2"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400">Situacao</label>
+                <label className="field-label">Situacao</label>
                 <select
                   value={form.Situacao}
                   onChange={(event) => setForm((prev) => ({ ...prev, Situacao: event.target.value }))}
-                  className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm"
+                  className="field-select mt-2"
                 >
                   {situacaoOptions.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -307,11 +307,11 @@ export function FuncionariosSection() {
                 </select>
               </div>
             </form>
-            <div className="flex shrink-0 items-center justify-end gap-3 border-t border-slate-200 px-6 py-4">
-              <button type="button" onClick={() => setShowModal(false)} className="rounded-xl border border-slate-200 px-4 py-2 text-sm">
+            <div className="modal-footer">
+              <button type="button" onClick={() => setShowModal(false)} className="button-cancel">
                 Cancelar
               </button>
-              <button type="submit" form="funcionario-form" disabled={submitting} className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60">
+              <button type="submit" form="funcionario-form" disabled={submitting} className="button-success disabled:opacity-60">
                 {submitting ? "Salvando..." : editingId ? "Atualizar" : "Cadastrar"}
               </button>
             </div>
@@ -321,3 +321,4 @@ export function FuncionariosSection() {
     </div>
   );
 }
+

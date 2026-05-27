@@ -75,13 +75,13 @@ export function ClienteServicosSection() {
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Buscar por nome ou descricao"
-              className="w-full rounded-2xl border border-blue-100 bg-blue-50/40 px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100 sm:w-80"
+              className="toolbar-search sm:w-80"
             />
           }
         />
 
         {error && (
-          <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-600">
+          <div className="feedback-danger">
             {error}
           </div>
         )}
@@ -115,3 +115,4 @@ export function ClienteServicosSection() {
     </div>
   );
 }
+

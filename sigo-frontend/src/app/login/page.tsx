@@ -131,7 +131,7 @@ export default function LoginPage() {
               Cadastre-se
             </Link>
           </p>
-          <p className="mt-3">© {new Date().getFullYear()} SIGO. Todos os direitos reservados.</p>
+          <p className="mt-3">Â© {new Date().getFullYear()} SIGO. Todos os direitos reservados.</p>
         </div>
       }
     >
@@ -139,7 +139,7 @@ export default function LoginPage() {
         <div className="space-y-3">
           <div className="flex items-center justify-between gap-3">
             <p className="text-sm font-semibold text-slate-800">Tipo de acesso</p>
-            <span className="text-xs font-medium uppercase tracking-[0.22em] text-slate-400">
+            <span className="text-xs font-medium uppercase tracking-normal text-slate-400">
               escolha antes de entrar
             </span>
           </div>

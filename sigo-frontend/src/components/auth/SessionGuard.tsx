@@ -69,7 +69,7 @@ export function SessionGuard({
               subtitle="Validacao de sessao"
               containerClassName="flex items-center gap-4 text-left"
               imageWrapperClassName="overflow-hidden rounded-[14px] border border-blue-100 bg-white shadow-[0_18px_34px_-22px_rgba(37,99,235,0.35)]"
-              titleClassName="text-xs font-semibold uppercase tracking-[0.32em] text-blue-600"
+              titleClassName="text-xs font-semibold uppercase tracking-normal text-blue-600"
               subtitleClassName="mt-1 text-sm text-slate-500"
             />
           </div>

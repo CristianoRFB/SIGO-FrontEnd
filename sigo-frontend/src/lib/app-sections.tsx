@@ -1,9 +1,10 @@
 import { ReactNode } from "react";
 import { ClientesSection } from "@/components/dashboard/ClientesSection";
-import { CoresSection } from "@/components/dashboard/CoresSection";
 import { FuncionariosSection } from "@/components/dashboard/FuncionariosSection";
 import { MarcasSection } from "@/components/dashboard/MarcasSection";
 import { OverviewSection } from "@/components/dashboard/OverviewSection";
+import { PecasSection } from "@/components/dashboard/PecasSection";
+import { PedidoSection } from "@/components/dashboard/PedidoSection";
 import { ServicosSection } from "@/components/dashboard/ServicosSection";
 import { VeiculosSection } from "@/components/dashboard/VeiculosSection";
 
@@ -21,11 +22,11 @@ export const appSections: AppSectionDefinition[] = [
   {
     id: "inicio",
     href: "/visao-geral",
-    label: "Início",
+    label: "Inicio",
     icon: "IN",
     title: "Indicadores e resumo semanal",
     subtitle:
-      "Acompanhe o desempenho da oficina, clientes ativos e andamento das ordens de serviço.",
+      "Acompanhe o desempenho da oficina, clientes ativos e andamento das ordens de servico.",
     component: <OverviewSection />,
   },
   {
@@ -33,7 +34,7 @@ export const appSections: AppSectionDefinition[] = [
     href: "/clientes",
     label: "Clientes",
     icon: "CL",
-    title: "Gestão de clientes",
+    title: "Gestao de clientes",
     subtitle:
       "Cadastre novos clientes, atualize dados e acompanhe o relacionamento da sua base.",
     component: <ClientesSection />,
@@ -45,27 +46,47 @@ export const appSections: AppSectionDefinition[] = [
     icon: "EQ",
     title: "Equipe e cargos",
     subtitle:
-      "Controle sua equipe interna, cargos, contatos e situação dos colaboradores.",
+      "Controle sua equipe interna, cargos, contatos e situacao dos colaboradores.",
     component: <FuncionariosSection />,
+  },
+  {
+    id: "pedidos",
+    href: "/pedidos",
+    label: "Pedidos",
+    icon: "PD",
+    title: "Ordens de servico",
+    subtitle:
+      "Cadastre pedidos com cliente, veiculo, equipe, servicos e pecas vinculadas ao atendimento.",
+    component: <PedidoSection />,
   },
   {
     id: "servicos",
     href: "/servicos",
-    label: "Serviços",
+    label: "Servicos",
     icon: "SV",
-    title: "Portfólio de serviços",
+    title: "Portfolio de servicos",
     subtitle:
-      "Defina preços, descrições e garantias para seus serviços de manutenção.",
+      "Defina precos, descricoes e garantias para seus servicos de manutencao.",
     component: <ServicosSection />,
+  },
+  {
+    id: "pecas",
+    href: "/pecas",
+    label: "Pecas",
+    icon: "PC",
+    title: "Estoque de pecas",
+    subtitle:
+      "Controle itens, marcas, fornecedores, garantia e quantidade do estoque operacional.",
+    component: <PecasSection />,
   },
   {
     id: "veiculos",
     href: "/veiculos",
-    label: "Veículos",
+    label: "Veiculos",
     icon: "VH",
-    title: "Veículos cadastrados",
+    title: "Veiculos cadastrados",
     subtitle:
-      "Gerencie o histórico de veículos, vincule cores e acompanhe o status de atendimento.",
+      "Gerencie o historico de veiculos e acompanhe o status de atendimento.",
     component: <VeiculosSection />,
   },
   {
@@ -73,20 +94,10 @@ export const appSections: AppSectionDefinition[] = [
     href: "/marcas",
     label: "Marcas",
     icon: "MK",
-    title: "Catálogo de marcas",
+    title: "Catalogo de marcas",
     subtitle:
-      "Organize as marcas e linhas de produtos para facilitar o cadastro de veículos.",
+      "Organize as marcas e linhas de produtos para facilitar os cadastros operacionais.",
     component: <MarcasSection />,
-  },
-  {
-    id: "cores",
-    href: "/cores",
-    label: "Cores",
-    icon: "CR",
-    title: "Cores disponíveis",
-    subtitle:
-      "Cadastre cores para vincular aos veículos e manter o estoque organizado.",
-    component: <CoresSection />,
   },
 ];
 

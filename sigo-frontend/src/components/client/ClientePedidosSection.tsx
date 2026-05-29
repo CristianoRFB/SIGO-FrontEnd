@@ -277,7 +277,7 @@ export function ClientePedidosSection() {
 
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               <div className="surface-highlight">
-                <p className="text-xs font-semibold uppercase tracking-[0.26em] text-blue-600">
+                <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">
                   Resumo
                 </p>
                 <div className="mt-3 space-y-2 text-sm text-slate-600">
@@ -306,7 +306,7 @@ export function ClientePedidosSection() {
               </div>
 
               <div className="app-subcard">
-                <p className="text-xs font-semibold uppercase tracking-[0.26em] text-blue-600">
+                <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">
                   Observacao
                 </p>
                 <p className="mt-3 text-sm leading-6 text-slate-600">
@@ -317,7 +317,7 @@ export function ClientePedidosSection() {
 
             <div className="mt-6 space-y-4">
               <div className="app-subcard">
-                <p className="text-xs font-semibold uppercase tracking-[0.26em] text-blue-600">
+                <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">
                   Servicos vinculados
                 </p>
                 {selectedPedido.Pedido_Servicos.length === 0 ? (
@@ -340,7 +340,7 @@ export function ClientePedidosSection() {
               </div>
 
               <div className="app-subcard">
-                <p className="text-xs font-semibold uppercase tracking-[0.26em] text-blue-600">
+                <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">
                   Pecas vinculadas
                 </p>
                 {selectedPedido.Pedido_Pecas.length === 0 ? (

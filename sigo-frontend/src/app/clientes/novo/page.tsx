@@ -44,10 +44,10 @@ export default function NovoClientePage() {
       <div className="mx-auto max-w-4xl">
         <div className="app-panel mb-6 flex flex-col gap-4 px-6 py-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-blue-600">
+            <p className="text-[11px] font-semibold uppercase tracking-normal text-blue-600">
               Painel / Clientes
             </p>
-            <h1 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950">
+            <h1 className="mt-2 text-3xl font-semibold tracking-normal text-slate-950">
               Cadastrar cliente
             </h1>
             <p className="mt-2 text-sm leading-6 text-slate-500">

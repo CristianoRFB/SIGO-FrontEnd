@@ -38,16 +38,16 @@ export function ClienteShell({ children }: ClienteShellProps) {
 
   return (
     <div className="min-h-screen">
-      <div className="mx-auto flex min-h-screen max-w-[1560px] gap-5 px-4 py-5 lg:px-8 lg:py-8">
-        <aside className="hidden w-80 shrink-0 xl:block">
-          <div className="sticky top-8 overflow-hidden rounded-[24px] border border-blue-950/20 bg-[linear-gradient(180deg,#10213f,#153169,#1d4ed8)] text-white shadow-[0_32px_80px_-38px_rgba(29,78,216,0.58)]">
+      <div className="flex min-h-screen w-full gap-4 px-3 py-4 sm:px-5 lg:px-6 xl:gap-5 xl:px-8 2xl:px-10">
+        <aside className="hidden w-[18rem] shrink-0 xl:block">
+          <div className="sticky top-4 flex min-h-[calc(100vh-2rem)] flex-col overflow-hidden rounded-[24px] border border-blue-950/20 bg-[linear-gradient(180deg,#10213f,#153169,#1d4ed8)] text-white shadow-[0_32px_80px_-38px_rgba(29,78,216,0.58)]">
             <div className="border-b border-white/12 px-7 py-7">
               <SigoBrand
                 size={50}
                 subtitle="Portal do cliente"
                 containerClassName="flex items-center gap-4"
                 imageWrapperClassName="overflow-hidden rounded-[14px] border border-white/14 bg-white/92 shadow-[0_18px_34px_-22px_rgba(15,23,42,0.55)]"
-                titleClassName="text-base font-semibold uppercase tracking-[0.3em] text-white"
+                titleClassName="text-base font-semibold uppercase tracking-normal text-white"
                 subtitleClassName="mt-1 text-sm text-blue-100/76"
               />
               <p className="mt-3 text-sm leading-6 text-blue-50/84">
@@ -55,7 +55,7 @@ export function ClienteShell({ children }: ClienteShellProps) {
               </p>
             </div>
 
-            <nav className="space-y-1 px-4 py-5">
+            <nav className="flex-1 space-y-1 px-4 py-5">
               {clientNavigation.map((item) => {
                 const isActive = item.href === pathname;
 
@@ -79,7 +79,7 @@ export function ClienteShell({ children }: ClienteShellProps) {
                       {item.icon}
                     </span>
                     <span className="flex-1">{item.label}</span>
-                    <span className="text-[11px] uppercase tracking-[0.18em] text-blue-100/60">
+                    <span className="text-[11px] uppercase tracking-normal text-blue-100/60">
                       {isActive ? "Atual" : "Ir"}
                     </span>
                   </Link>
@@ -89,7 +89,7 @@ export function ClienteShell({ children }: ClienteShellProps) {
 
             <div className="border-t border-white/12 px-5 py-5">
               <div className="rounded-[18px] border border-white/12 bg-white/8 p-4">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-blue-100/75">
+                <p className="text-[11px] font-semibold uppercase tracking-normal text-blue-100/75">
                   Sessao ativa
                 </p>
                 <p className="mt-3 text-base font-semibold text-white">
@@ -118,7 +118,7 @@ export function ClienteShell({ children }: ClienteShellProps) {
               subtitle={user?.name || "Portal do cliente"}
               containerClassName="flex items-center gap-3"
               imageWrapperClassName="overflow-hidden rounded-[10px] border border-blue-100 bg-white shadow-[0_10px_22px_-18px_rgba(37,99,235,0.45)]"
-              titleClassName="text-[11px] font-semibold uppercase tracking-[0.3em] text-blue-600"
+              titleClassName="text-[11px] font-semibold uppercase tracking-normal text-blue-600"
               subtitleClassName="mt-1 text-sm font-semibold text-slate-900"
             />
             <button
@@ -160,11 +160,11 @@ export function ClienteShell({ children }: ClienteShellProps) {
                       subtitle="Cliente / Atendimento"
                       containerClassName="flex items-center gap-3"
                       imageWrapperClassName="overflow-hidden rounded-[10px] border border-blue-100 bg-white"
-                      titleClassName="text-[11px] font-semibold uppercase tracking-[0.32em] text-blue-600"
+                      titleClassName="text-[11px] font-semibold uppercase tracking-normal text-blue-600"
                       subtitleClassName="mt-0.5 text-xs text-slate-500"
                     />
                   </div>
-                  <h2 className="mt-3 text-3xl font-semibold tracking-[-0.05em] text-slate-950 lg:text-[2.25rem]">
+                  <h2 className="mt-3 text-3xl font-semibold tracking-normal text-slate-950 lg:text-[2.25rem]">
                     {currentPage.title}
                   </h2>
                   <p className="mt-3 text-sm leading-7 text-slate-500">
@@ -174,7 +174,7 @@ export function ClienteShell({ children }: ClienteShellProps) {
 
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="rounded-[14px] border border-blue-100 bg-blue-50/80 px-4 py-3">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-blue-600">
+                    <p className="text-[11px] font-semibold uppercase tracking-normal text-blue-600">
                       Conta
                     </p>
                     <p className="mt-2 text-sm font-semibold text-slate-900">
@@ -182,7 +182,7 @@ export function ClienteShell({ children }: ClienteShellProps) {
                     </p>
                   </div>
                   <div className="rounded-[14px] border border-slate-200 bg-slate-50/90 px-4 py-3">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                    <p className="text-[11px] font-semibold uppercase tracking-normal text-slate-500">
                       Navegacao
                     </p>
                     <p className="mt-2 text-sm font-semibold text-slate-900">

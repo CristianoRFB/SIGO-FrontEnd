@@ -5,15 +5,20 @@ import { StatCard } from "@/components/ui/StatCard";
 import { DataTable } from "@/components/ui/DataTable";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { situacaoOptions, statusVeiculoOptions } from "@/lib/constants";
-import { Cliente, Funcionario, Servico, Veiculo } from "@/types/entities";
+import { Cliente, Funcionario, Peca, Pedido, Servico, Veiculo } from "@/types/entities";
+import { getUserFromToken } from "@/services/auth";
 import { listClientes } from "@/services/clientes";
 import { listFuncionarios } from "@/services/funcionarios";
+import { listPedidos } from "@/services/pedidos";
+import { listPecas } from "@/services/pecas";
 import { listServicos } from "@/services/servicos";
 import { listVeiculos } from "@/services/veiculos";
 
 interface MetricsState {
   clientes: Cliente[];
   funcionarios: Funcionario[];
+  pedidos: Pedido[];
+  pecas: Peca[];
   servicos: Servico[];
   veiculos: Veiculo[];
 }
@@ -21,6 +26,8 @@ interface MetricsState {
 const initialState: MetricsState = {
   clientes: [],
   funcionarios: [],
+  pedidos: [],
+  pecas: [],
   servicos: [],
   veiculos: [],
 };
@@ -52,10 +59,21 @@ export function OverviewSection() {
         setLoading(true);
         setError(null);
 
-        const [clientesList, funcionariosList, servicosList, veiculosList] =
+        const user = getUserFromToken();
+        const canLoadPedidos = user?.role === "Admin" || user?.role === "Oficina";
+        const [
+          clientesList,
+          funcionariosList,
+          pedidosList,
+          pecasList,
+          servicosList,
+          veiculosList,
+        ] =
           await Promise.all([
             listClientes(),
             listFuncionarios(),
+            canLoadPedidos ? listPedidos() : Promise.resolve([]),
+            listPecas(),
             listServicos(),
             listVeiculos(),
           ]);
@@ -63,6 +81,8 @@ export function OverviewSection() {
         setData({
           clientes: clientesList,
           funcionarios: funcionariosList,
+          pedidos: pedidosList,
+          pecas: pecasList,
           servicos: servicosList,
           veiculos: veiculosList,
         });
@@ -121,10 +141,15 @@ export function OverviewSection() {
   const veiculosEmFluxo = statusSummary.aguardando + statusSummary.andamento;
   const ticketMedio = data.servicos.length > 0 ? faturamentoEstimado / data.servicos.length : 0;
   const statusBase = Math.max(data.veiculos.length, 1);
+  const estoquePecas = useMemo(
+    () => data.pecas.reduce((acc, peca) => acc + (peca.Quantidade ?? 0), 0),
+    [data.pecas]
+  );
+  const pedidosCatalogados = data.pedidos.length;
 
   return (
     <div className="space-y-8">
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
         <StatCard
           title="Clientes ativos"
           value={loading ? "--" : String(clientesAtivos)}
@@ -147,6 +172,16 @@ export function OverviewSection() {
           helper="Catalogo operacional para uso imediato"
         />
         <StatCard
+          title="Pedidos"
+          value={loading ? "--" : String(pedidosCatalogados)}
+          helper="Ordens de servico registradas"
+        />
+        <StatCard
+          title="Pecas em estoque"
+          value={loading ? "--" : String(estoquePecas)}
+          helper="Quantidade total cadastrada"
+        />
+        <StatCard
           title="Receita catalogada"
           value={loading ? "--" : formatCurrency(faturamentoEstimado)}
           helper="Somatorio do valor base dos servicos cadastrados"
@@ -159,10 +194,10 @@ export function OverviewSection() {
         <div className="app-card overflow-hidden">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-blue-600">
+              <p className="text-[11px] font-semibold uppercase tracking-normal text-blue-600">
                 Visao executiva
               </p>
-              <h3 className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
+              <h3 className="mt-3 text-2xl font-semibold tracking-normal text-slate-950">
                 Operacao distribuida por atendimento, cadastro e capacidade da equipe
               </h3>
               <p className="mt-3 text-sm leading-7 text-slate-500">
@@ -172,10 +207,10 @@ export function OverviewSection() {
             </div>
 
             <div className="rounded-[16px] border border-blue-100 bg-blue-50/80 px-4 py-3">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-blue-600">
+              <p className="text-[11px] font-semibold uppercase tracking-normal text-blue-600">
                 Em fluxo
               </p>
-              <p className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
+              <p className="mt-2 text-2xl font-semibold tracking-normal text-slate-950">
                 {loading ? "--" : String(veiculosEmFluxo)}
               </p>
               <p className="mt-1 text-sm text-slate-500">veiculos em acompanhamento no momento</p>
@@ -213,7 +248,7 @@ export function OverviewSection() {
                     <p className="metric-kicker">{item.label}</p>
                     <span className={`h-2.5 w-2.5 rounded-full ${item.color}`} />
                   </div>
-                  <p className="mt-4 text-3xl font-semibold tracking-[-0.05em] text-slate-950">
+                  <p className="mt-4 text-3xl font-semibold tracking-normal text-slate-950">
                     {loading ? "--" : String(item.value)}
                   </p>
                   <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-100">
@@ -231,7 +266,7 @@ export function OverviewSection() {
 
         <div className="grid gap-6">
           <div className="app-card">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-blue-600">
+            <p className="text-[11px] font-semibold uppercase tracking-normal text-blue-600">
               Indicadores de operacao
             </p>
             <div className="mt-5 space-y-4">
@@ -264,10 +299,10 @@ export function OverviewSection() {
           </div>
 
           <div className="app-card bg-[linear-gradient(135deg,#0f172a,#172554,#1d4ed8)] text-white">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-blue-100/78">
+            <p className="text-[11px] font-semibold uppercase tracking-normal text-blue-100/78">
               Resumo rapido
             </p>
-            <p className="mt-3 text-2xl font-semibold tracking-[-0.04em]">
+            <p className="mt-3 text-2xl font-semibold tracking-normal">
               {loading ? "--" : String(veiculosEmFluxo)} veiculos exigem acompanhamento proximo
             </p>
             <p className="mt-3 text-sm leading-6 text-blue-50/74">

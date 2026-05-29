@@ -140,11 +140,11 @@ export function ClienteDashboardSection() {
           <div className="absolute inset-x-0 top-0 h-1.5 bg-[linear-gradient(90deg,#1d4ed8,#60a5fa)]" />
           <div className="grid gap-6 lg:grid-cols-[1.3fr_0.9fr]">
             <div className="space-y-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.32em] text-blue-600">
+              <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">
                 Portal do cliente
               </p>
               <div>
-                <h2 className="text-3xl font-semibold tracking-[-0.04em] text-slate-950">
+                <h2 className="text-3xl font-semibold tracking-normal text-slate-950">
                   {authUser ? `Ola, ${authUser.name}.` : "Acompanhe seu veiculo com clareza."}
                 </h2>
                 <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
@@ -182,7 +182,7 @@ export function ClienteDashboardSection() {
 
             <div className="surface-muted space-y-4">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-500">
+                <p className="text-xs font-semibold uppercase tracking-normal text-slate-500">
                   Situacao atual
                 </p>
                 <h3 className="mt-2 text-xl font-semibold text-slate-950">
@@ -197,13 +197,13 @@ export function ClienteDashboardSection() {
 
               <div className="grid gap-3">
                 <div className="rounded-[14px] border border-slate-200 bg-white px-4 py-3">
-                  <p className="text-xs uppercase tracking-[0.24em] text-slate-500">
+                  <p className="text-xs uppercase tracking-normal text-slate-500">
                     Ultimo servico
                   </p>
                   <p className="mt-2 text-sm font-semibold text-slate-900">{ultimoServico}</p>
                 </div>
                 <div className="rounded-[14px] border border-slate-200 bg-white px-4 py-3">
-                  <p className="text-xs uppercase tracking-[0.24em] text-slate-500">
+                  <p className="text-xs uppercase tracking-normal text-slate-500">
                     Ultimo pedido
                   </p>
                   <p className="mt-2 text-sm font-semibold text-slate-900">
@@ -213,7 +213,7 @@ export function ClienteDashboardSection() {
                   </p>
                 </div>
                 <div className="rounded-[14px] border border-slate-200 bg-white px-4 py-3">
-                  <p className="text-xs uppercase tracking-[0.24em] text-slate-500">
+                  <p className="text-xs uppercase tracking-normal text-slate-500">
                     Veiculos em manutencao
                   </p>
                   <p className="mt-2 text-sm font-semibold text-slate-900">

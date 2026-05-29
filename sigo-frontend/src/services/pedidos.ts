@@ -1,5 +1,12 @@
 import { buildBackendUrl } from "@/lib/config";
-import type { Funcionario, Pedido, PedidoPeca, PedidoServico, Servico } from "@/types/entities";
+import type {
+  ApiResponse,
+  Funcionario,
+  Pedido,
+  PedidoPeca,
+  PedidoServico,
+  Servico,
+} from "@/types/entities";
 import { apiFetch } from "./api-client";
 import { unwrapArray, unwrapData } from "./service-utils";
 
@@ -143,6 +150,31 @@ export async function getPedido(id: number) {
   const payload = await apiFetch(`${BASE_URL}/${id}`);
   const pedido = unwrapData<RawPedido>(payload);
   return pedido ? normalizePedido(pedido) : null;
+}
+
+export async function createPedido(
+  pedido: Partial<Pedido>
+): Promise<ApiResponse<Pedido>> {
+  return apiFetch(BASE_URL, {
+    method: "POST",
+    body: JSON.stringify(pedido),
+  });
+}
+
+export async function updatePedido(
+  id: number,
+  pedido: Partial<Pedido>
+): Promise<ApiResponse<Pedido>> {
+  return apiFetch(`${BASE_URL}/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(pedido),
+  });
+}
+
+export async function deletePedido(id: number): Promise<ApiResponse<null>> {
+  return apiFetch(`${BASE_URL}/${id}`, {
+    method: "DELETE",
+  });
 }
 
 export async function listMyPedidoServices() {

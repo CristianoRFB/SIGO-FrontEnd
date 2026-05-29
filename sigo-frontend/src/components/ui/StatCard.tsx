@@ -24,7 +24,7 @@ export function StatCard({ title, value, helper, trend, icon }: StatCardProps) {
             <p className="metric-kicker">
               {title}
             </p>
-            <p className="mt-4 text-[2.2rem] font-semibold tracking-[-0.05em] text-slate-950">
+            <p className="mt-4 text-[2.2rem] font-semibold tracking-normal text-slate-950">
               {value}
             </p>
           </div>
@@ -42,7 +42,7 @@ export function StatCard({ title, value, helper, trend, icon }: StatCardProps) {
         {trend && (
           <div className="flex items-center gap-3 border-t border-slate-200/80 pt-4">
             <span
-              className={`inline-flex rounded-md border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.16em] ${
+              className={`inline-flex rounded-md border px-2.5 py-1 text-xs font-semibold uppercase tracking-normal ${
                 trend.positive
                   ? "border-blue-200 bg-blue-50 text-blue-700"
                   : "border-rose-200 bg-rose-50 text-rose-700"

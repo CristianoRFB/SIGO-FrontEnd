@@ -54,13 +54,13 @@ export function AuthShell({
                   subtitle="Oficina conectada"
                   containerClassName="flex items-center gap-3"
                   imageWrapperClassName="overflow-hidden rounded-[12px] border border-white/12 bg-white/90 shadow-[0_12px_28px_-18px_rgba(15,23,42,0.55)]"
-                  titleClassName="text-sm font-semibold uppercase tracking-[0.28em] text-white"
-                  subtitleClassName="mt-1 text-[11px] uppercase tracking-[0.28em] text-blue-100/78"
+                  titleClassName="text-sm font-semibold uppercase tracking-normal text-white"
+                  subtitleClassName="mt-1 text-[11px] uppercase tracking-normal text-blue-100/78"
                 />
               </div>
 
               <div className="hidden rounded-[16px] border border-white/14 bg-white/10 px-4 py-3 backdrop-blur-md sm:block">
-                <p className="text-[11px] uppercase tracking-[0.3em] text-blue-100/76">
+                <p className="text-[11px] uppercase tracking-normal text-blue-100/76">
                   Performance
                 </p>
                 <p className="mt-2 text-2xl font-semibold text-white">+38%</p>
@@ -75,10 +75,10 @@ export function AuthShell({
                   subtitle="Gestao inteligente para oficinas e clientes"
                   containerClassName="flex items-center gap-4"
                   imageWrapperClassName="overflow-hidden rounded-[14px] border border-white/14 bg-white/92 shadow-[0_18px_36px_-22px_rgba(15,23,42,0.65)]"
-                  titleClassName="text-base font-semibold uppercase tracking-[0.34em] text-white"
+                  titleClassName="text-base font-semibold uppercase tracking-normal text-white"
                   subtitleClassName="mt-1 text-sm text-blue-100/78"
                 />
-                <h1 className="mt-5 max-w-lg text-[2.45rem] font-semibold leading-[1.02] tracking-[-0.05em] text-white sm:text-[3.2rem]">
+                <h1 className="mt-5 max-w-lg text-[2.45rem] font-semibold leading-[1.02] tracking-normal text-white sm:text-[3.2rem]">
                   A gestao da oficina com uma presenca mais confiante e profissional.
                 </h1>
                 <p className="mt-5 max-w-lg text-sm leading-7 text-blue-50/82 sm:text-base">
@@ -93,7 +93,7 @@ export function AuthShell({
                       className="rounded-[16px] border border-white/15 bg-white/10 px-5 py-4 backdrop-blur-md"
                     >
                       <p className="text-2xl font-semibold text-white">{item.value}</p>
-                      <p className="mt-1 text-[11px] uppercase tracking-[0.26em] text-blue-100/80">
+                      <p className="mt-1 text-[11px] uppercase tracking-normal text-blue-100/80">
                         {item.label}
                       </p>
                     </div>
@@ -114,16 +114,16 @@ export function AuthShell({
                   subtitle="Sistema integrado para oficinas e clientes"
                   containerClassName="flex items-center gap-4"
                   imageWrapperClassName="overflow-hidden rounded-[12px] border border-blue-100 bg-white shadow-[0_16px_28px_-18px_rgba(37,99,235,0.45)]"
-                  titleClassName="text-[11px] font-semibold uppercase tracking-[0.32em] text-blue-600"
+                  titleClassName="text-[11px] font-semibold uppercase tracking-normal text-blue-600"
                   subtitleClassName="mt-1 text-sm text-slate-600"
                 />
               </div>
 
               <div className="mt-10">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-blue-600">
+                <p className="text-[11px] font-semibold uppercase tracking-normal text-blue-600">
                   {eyebrow}
                 </p>
-                <h2 className="mt-4 max-w-md text-4xl font-semibold tracking-[-0.05em] text-slate-950 sm:text-[3rem]">
+                <h2 className="mt-4 max-w-md text-4xl font-semibold tracking-normal text-slate-950 sm:text-[3rem]">
                   {title}
                 </h2>
                 <p className="mt-4 max-w-md text-sm leading-7 text-slate-500">{description}</p>
@@ -132,7 +132,7 @@ export function AuthShell({
               {children}
 
               <div className="mt-8 rounded-[18px] border border-slate-200/80 bg-white p-5 shadow-[0_24px_60px_-42px_rgba(37,99,235,0.35)]">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-blue-600">
+                <p className="text-[11px] font-semibold uppercase tracking-normal text-blue-600">
                   Fluxo inteligente
                 </p>
                 <div className="mt-4 grid gap-3 sm:grid-cols-3">

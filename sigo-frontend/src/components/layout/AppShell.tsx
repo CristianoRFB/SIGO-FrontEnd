@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ReactNode } from "react";
+import { ReactNode, useMemo } from "react";
 import { SigoBrand } from "@/components/branding/SigoBrand";
 import { getPanelMeta, panelNavigation } from "@/lib/panel-navigation";
+import { getUserFromToken } from "@/services/auth";
 
 interface AppShellProps {
   children: ReactNode;
@@ -13,22 +14,28 @@ interface AppShellProps {
 export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
   const currentPage = getPanelMeta(pathname);
+  const visibleNavigation = useMemo(() => {
+    const role = getUserFromToken()?.role;
+    return panelNavigation.filter(
+      (item) => item.href !== "/pedidos" || role === "Admin" || role === "Oficina"
+    );
+  }, []);
 
   return (
     <div className="min-h-screen">
-      <div className="mx-auto flex min-h-screen max-w-[1600px] gap-5 px-4 py-5 lg:px-8 lg:py-8">
-        <aside className="hidden w-76 shrink-0 xl:block">
-          <div className="sticky top-8 overflow-hidden rounded-[24px] border border-slate-800 bg-[linear-gradient(180deg,#0f172a,#111c34,#172554)] text-white shadow-[0_32px_80px_-38px_rgba(15,23,42,0.72)]">
+      <div className="flex min-h-screen w-full gap-4 px-3 py-4 sm:px-5 lg:px-6 xl:gap-5 xl:px-8 2xl:px-10">
+        <aside className="hidden w-[18rem] shrink-0 xl:block">
+          <div className="sticky top-4 flex min-h-[calc(100vh-2rem)] flex-col overflow-hidden rounded-[24px] border border-slate-800 bg-[linear-gradient(180deg,#0f172a,#111c34,#172554)] text-white shadow-[0_32px_80px_-38px_rgba(15,23,42,0.72)]">
             <div className="border-b border-white/10 px-7 py-7">
               <SigoBrand
                 size={48}
                 subtitle="Painel operacional"
                 containerClassName="flex items-center gap-4"
                 imageWrapperClassName="overflow-hidden rounded-[14px] border border-white/12 bg-white/92 shadow-[0_18px_34px_-22px_rgba(15,23,42,0.55)]"
-                titleClassName="text-sm font-semibold uppercase tracking-[0.34em] text-white"
+                titleClassName="text-sm font-semibold uppercase tracking-normal text-white"
                 subtitleClassName="mt-1 text-sm text-blue-100/74"
               />
-              <h1 className="mt-3 text-2xl font-semibold tracking-[-0.04em]">
+              <h1 className="mt-3 text-2xl font-semibold tracking-normal">
                 Painel operacional
               </h1>
               <p className="mt-3 text-sm leading-6 text-slate-300">
@@ -36,8 +43,8 @@ export function AppShell({ children }: AppShellProps) {
               </p>
             </div>
 
-            <nav className="space-y-1 px-4 py-5">
-              {panelNavigation.map((item) => {
+            <nav className="flex-1 space-y-1 px-4 py-5">
+              {visibleNavigation.map((item) => {
                 const isActive = item.href === pathname;
 
                 return (
@@ -60,7 +67,7 @@ export function AppShell({ children }: AppShellProps) {
                       {item.icon}
                     </span>
                     <span className="flex-1">{item.label}</span>
-                    <span className="text-[11px] uppercase tracking-[0.18em] text-slate-400">
+                    <span className="text-[11px] uppercase tracking-normal text-slate-400">
                       {isActive ? "Atual" : "Ir"}
                     </span>
                   </Link>
@@ -70,7 +77,7 @@ export function AppShell({ children }: AppShellProps) {
 
             <div className="border-t border-white/10 px-5 py-5">
               <div className="rounded-[18px] border border-white/10 bg-white/6 p-4">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-blue-200/80">
+                <p className="text-[11px] font-semibold uppercase tracking-normal text-blue-200/80">
                   Ambiente
                 </p>
                 <p className="mt-3 text-base font-semibold text-white">Visao consolidada</p>
@@ -84,7 +91,7 @@ export function AppShell({ children }: AppShellProps) {
 
         <main className="min-w-0 flex-1">
           <nav className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-3 xl:hidden">
-            {panelNavigation.map((item) => {
+            {visibleNavigation.map((item) => {
               const isActive = item.href === pathname;
 
               return (
@@ -113,11 +120,11 @@ export function AppShell({ children }: AppShellProps) {
                       subtitle="Gestao"
                       containerClassName="flex items-center gap-3"
                       imageWrapperClassName="overflow-hidden rounded-[10px] border border-blue-100 bg-white"
-                      titleClassName="text-[11px] font-semibold uppercase tracking-[0.32em] text-blue-600"
+                      titleClassName="text-[11px] font-semibold uppercase tracking-normal text-blue-600"
                       subtitleClassName="mt-0.5 text-xs text-slate-500"
                     />
                   </div>
-                  <h2 className="mt-3 text-3xl font-semibold tracking-[-0.05em] text-slate-950 lg:text-[2.35rem]">
+                  <h2 className="mt-3 text-3xl font-semibold tracking-normal text-slate-950 lg:text-[2.35rem]">
                     {currentPage.title}
                   </h2>
                   <p className="mt-3 text-sm leading-7 text-slate-500">
@@ -127,7 +134,7 @@ export function AppShell({ children }: AppShellProps) {
 
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="rounded-[14px] border border-slate-200 bg-slate-50/90 px-4 py-3">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                    <p className="text-[11px] font-semibold uppercase tracking-normal text-slate-500">
                       Navegacao
                     </p>
                     <p className="mt-2 text-sm font-semibold text-slate-900">
@@ -135,7 +142,7 @@ export function AppShell({ children }: AppShellProps) {
                     </p>
                   </div>
                   <div className="rounded-[14px] border border-blue-100 bg-blue-50/80 px-4 py-3">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-blue-600">
+                    <p className="text-[11px] font-semibold uppercase tracking-normal text-blue-600">
                       Status
                     </p>
                     <p className="mt-2 text-sm font-semibold text-slate-900">

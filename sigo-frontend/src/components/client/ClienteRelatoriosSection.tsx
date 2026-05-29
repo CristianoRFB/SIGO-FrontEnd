@@ -119,14 +119,14 @@ export function ClienteRelatoriosSection() {
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blue-600">
+                      <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">
                         Veiculo #{veiculo.Id}
                       </p>
                       <h3 className="mt-2 text-xl font-semibold text-slate-900">
                         {veiculo.NomeVeiculo || "Sem nome"}
                       </h3>
                       <p className="mt-1 text-sm text-slate-500">
-                        {veiculo.PlacaVeiculo || "Placa nao informada"} •{" "}
+                        {veiculo.PlacaVeiculo || "Placa nao informada"} â€¢{" "}
                         {veiculo.TipoVeiculo || "Tipo nao informado"}
                       </p>
                     </div>

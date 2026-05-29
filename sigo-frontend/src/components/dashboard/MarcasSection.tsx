@@ -190,7 +190,7 @@ export function MarcasSection() {
           <div className="modal-card max-w-lg">
             <div className="modal-header">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-600">
+                <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">
                   {editingId !== null ? "Editar" : "Nova"} Marca
                 </p>
                 <h3 className="mt-2 text-lg font-semibold text-slate-900">

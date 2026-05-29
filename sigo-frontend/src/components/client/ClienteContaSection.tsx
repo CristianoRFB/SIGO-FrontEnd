@@ -259,7 +259,7 @@ export function ClienteContaSection() {
 
         <div className="grid gap-4 lg:grid-cols-3">
           <div className="surface-highlight">
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blue-600">
+            <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">
               Identificacao
             </p>
             <p className="mt-3 text-xl font-semibold text-slate-900">{cliente.Nome}</p>
@@ -268,7 +268,7 @@ export function ClienteContaSection() {
           </div>
 
           <div className="app-subcard">
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blue-600">
+            <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">
               Cadastro
             </p>
             <div className="mt-3 space-y-2 text-sm text-slate-600">
@@ -292,7 +292,7 @@ export function ClienteContaSection() {
           </div>
 
           <div className="app-subcard">
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blue-600">
+            <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">
               Endereco
             </p>
             <p className="mt-3 text-sm leading-6 text-slate-600">{formatAddress(cliente)}</p>
@@ -302,7 +302,7 @@ export function ClienteContaSection() {
 
       <section className="app-card space-y-5">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blue-600">
+          <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">
             Dados editaveis
           </p>
           <p className="mt-2 text-sm text-slate-500">

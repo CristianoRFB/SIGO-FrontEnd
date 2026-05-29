@@ -12,7 +12,9 @@ const visibleSectionIds = new Set([
   "inicio",
   "clientes",
   "funcionarios",
+  "pedidos",
   "servicos",
+  "pecas",
   "veiculos",
   "marcas",
 ]);
